@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulado · Fliperama do Enigma · Matemática 6º</title>
+<style>
+  :root{
+    --fundo:#140b1f; --fundo2:#1f1230; --borda:#3b2456; --borda2:#5a3880;
+    --verde:#4ef08a; --laranja:#ff9e3d; --ciano:#49dcff; --lilas:#c08cff;
+    --verm:#ff4d6d; --ambar:#ffcc4d; --texto:#f3eefc; --cinza:#b8a6d4;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',system-ui,Arial,sans-serif;font-size:17px;background:
+    radial-gradient(900px 420px at 50% -8%,rgba(73,220,255,.14),transparent 70%),var(--fundo);
+    color:var(--texto);line-height:1.6;padding-bottom:60px}
+  .pixel{height:14px;background:
+    repeating-linear-gradient(90deg,#4ef08a 0 14px,transparent 14px 28px) 0 0/112px 7px repeat-x,
+    repeating-linear-gradient(90deg,#ff9e3d 0 14px,transparent 14px 28px) 28px 7px/112px 7px repeat-x,
+    repeating-linear-gradient(90deg,#49dcff 0 14px,transparent 14px 28px) 56px 0/112px 7px repeat-x;opacity:.85}
+  header{background:linear-gradient(120deg,#0c1c3f,#102a54 55%,#1a0f28);padding:22px 18px;text-align:center;border-bottom:5px solid var(--verm);box-shadow:0 4px 18px rgba(0,0,0,.55)}
+  header .selo{font-family:'Consolas','Courier New',monospace;font-size:.76rem;letter-spacing:4px;color:#b9dcff;text-transform:uppercase}
+  header h1{font-family:'Consolas','Courier New',monospace;font-size:1.46rem;margin:8px 0 4px}
+  header p{color:#dce8f7;font-size:.9rem}
+  .wrap{max-width:820px;margin:0 auto;padding:16px}
+  .barra-nav{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:16px 0}
+  .barra-nav a{background:var(--fundo2);color:var(--texto);text-decoration:none;padding:7px 12px;border-radius:20px;font-size:.85rem;border:1px solid var(--borda)}
+  .barra-nav a.on{background:var(--verm);color:#2b0710;font-weight:bold}
+  .barra-nav a.lock{opacity:.5}
+  .intro{background:var(--fundo2);border:1px solid var(--borda);border-radius:14px;padding:16px;margin-bottom:16px}
+  .intro h2{color:var(--ciano);font-size:1.1rem;margin-bottom:8px;font-family:'Consolas','Courier New',monospace}
+  .intro ul{margin:8px 0 0 20px} .intro li{margin-bottom:4px}
+  .painel{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;background:var(--fundo2);border:1px solid var(--borda);border-radius:12px;padding:10px 14px;margin-bottom:14px;font-size:.85rem}
+  .painel .btns{display:flex;gap:6px;flex-wrap:wrap}
+  button{cursor:pointer;font-family:inherit}
+  .mini{background:var(--fundo);color:var(--texto);border:1px solid var(--borda2);border-radius:8px;padding:6px 10px;font-size:.8rem}
+  .progresso{height:11px;background:#241538;border-radius:8px;overflow:hidden;margin-bottom:18px}
+  .progresso div{height:100%;width:0;background:linear-gradient(90deg,var(--verde),var(--ciano));transition:width .3s}
+  .q{background:var(--fundo2);border:1px solid var(--borda);border-radius:14px;padding:16px;margin-bottom:16px}
+  .q .num{font-family:'Consolas','Courier New',monospace;font-size:.72rem;color:var(--cinza);letter-spacing:2px;text-transform:uppercase;margin:6px 0}
+  .q h3{font-size:1.02rem;margin-bottom:10px;font-weight:600;line-height:1.5}
+  .tipo{font-size:.66rem;letter-spacing:1px;text-transform:uppercase;padding:2px 9px;border-radius:10px;font-weight:bold}
+  .tipo.mc{background:#0d2b3b;color:var(--ciano)}
+  .tipo.rom{background:#3a2410;color:#ffc383}
+  .afirm{background:#120a1d;border-left:3px solid var(--borda2);padding:8px 12px;margin:6px 0;border-radius:0 8px 8px 0;font-size:.95rem}
+  .afirm.ok{border-left-color:var(--verde)} .afirm.no{border-left-color:#6c5d85;color:#a393c0}
+  label.alt{display:block;background:#171028;border:1px solid var(--borda);border-radius:10px;padding:10px 12px;margin-bottom:8px;cursor:pointer;font-size:.96rem}
+  label.alt:hover{border-color:var(--borda2)}
+  label.alt.sel{border-color:var(--ciano);background:#13243a}
+  label.alt.certa{border-color:var(--verde);background:#0e2a1c}
+  label.alt.marcada-errada{border-color:var(--verm);background:#3b1020}
+  label.alt.errada{opacity:.72;background:#191328;border-color:#4a3a66}
+  label.alt input{margin-right:6px}
+  .exp{display:none;margin-top:7px;font-size:.87rem;color:#d7cdea;border-top:1px dashed var(--borda2);padding-top:6px}
+  .exp.show{display:block}
+  .enviar{width:100%;background:var(--verm);color:#2b0710;border:none;border-radius:12px;padding:15px;font-weight:bold;font-size:1.06rem;margin-top:6px}
+  .enviar:disabled{background:#2c2141;color:#8a7aa8;cursor:not-allowed}
+  .codigo{display:none;background:linear-gradient(120deg,#0e2a1c,#133a2a);border:2px solid var(--verde);border-radius:14px;padding:16px;margin-bottom:16px;text-align:center}
+  .codigo.show{display:block}
+  .codigo .cod{font-family:'Consolas','Courier New',monospace;font-size:2rem;color:var(--verde);letter-spacing:3px;margin:6px 0}
+  .gab{display:none;background:var(--fundo2);border:1px solid var(--borda);border-radius:14px;padding:16px;margin-top:16px}
+  .gab.show{display:block}
+  .gab input{background:#0f0918;color:var(--texto);border:1px solid var(--borda2);border-radius:8px;padding:9px;font-family:'Consolas','Courier New',monospace;margin:8px 6px 0 0;width:150px}
+  .gab button{background:var(--ciano);color:#042030;border:none;border-radius:8px;padding:9px 16px;font-weight:bold}
+  .gab .msg{margin-top:9px;font-size:.9rem}
+  .fim{display:none;background:linear-gradient(120deg,#0e2a1c,#133a2a);border:2px solid var(--verde);border-radius:16px;padding:18px;margin-top:18px;text-align:center}
+  .fim h3{color:#9df5c4;margin-bottom:8px}
+  .fim a{display:inline-block;margin-top:8px;background:var(--verde);color:#06240f;text-decoration:none;font-weight:bold;padding:11px 20px;border-radius:10px}
+  .modal-bg{display:none;position:fixed;inset:0;background:rgba(6,3,12,.95);z-index:50;align-items:center;justify-content:center;padding:16px}
+  .modal-bg.show{display:flex}
+  .modal{background:var(--fundo2);border:2px solid var(--borda2);border-radius:14px;padding:22px;max-width:440px;text-align:center}
+  .modal p{margin-bottom:14px} .modal .big{font-size:2.4rem;margin-bottom:6px}
+  .modal a,.modal button{display:inline-block;background:var(--verde);color:#06240f;border:none;border-radius:8px;padding:10px 18px;font-weight:bold;text-decoration:none}
+  .rodape{text-align:center;color:var(--cinza);font-size:.8rem;margin-top:24px}
+  @media(max-width:600px){ body{font-size:16px} header h1{font-size:1.15rem} }
+</style>
+</head>
+<body>
+<div class="pixel"></div>
+<header>
+  <div class="selo">Fliperama do Enigma · Matemática 6º ano · CCF</div>
+  <h1>📝 Simulado — Partida Valendo</h1>
+  <p>30 questões · múltipla escolha e números romanos · Código SIM</p>
+</header>
+<div class="pixel"></div>
+
+<div class="wrap">
+  <nav class="barra-nav" id="nav">
+    <a href="leitura-estendida.html">📖 Leitura Estendida</a>
+    <a href="resumo.html">🗺️ Resumo</a>
+    <a class="on" href="simulado.html">📝 Simulado</a>
+    <a href="index.html">🏠 Início</a>
+  </nav>
+
+  <div class="codigo" id="codigo"><div>Seu código de liberação</div><div class="cod" id="cod"></div><div id="codtxt"></div></div>
+
+  <div class="intro">
+    <h2>🕹️ Última ficha: a partida valendo!</h2>
+    <p>Agora é como se fosse a prova de verdade. São <b>30 questões</b> (todas obrigatórias), de dois tipos:</p>
+    <ul>
+      <li><b>Múltipla escolha:</b> marque a alternativa correta.</li>
+      <li><b>Números romanos:</b> analise as afirmativas I, II, III e IV e marque a alternativa que diz quais estão corretas.</li>
+    </ul>
+    <p style="margin-top:6px">Tenha papel e lápis por perto: várias questões pedem conta. Depois de enviar, as respostas travam e sai o seu <b>código SIM</b>, que abre o gabarito comentado.</p>
+  </div>
+
+  <div class="painel">
+    <span id="salvo">💾 Progresso salvo automaticamente.</span>
+    <div class="btns">
+      <button class="mini" onclick="exportar()">📥 Exportar</button>
+      <button class="mini" onclick="document.getElementById('imp').click()">📤 Importar</button>
+      <input type="file" id="imp" accept="application/json" style="display:none" onchange="importar(event)">
+      <button class="mini" onclick="pedirZerar()">🗑️ Zerar tudo</button>
+    </div>
+  </div>
+
+  <div class="progresso"><div id="barra"></div></div>
+  <div id="questoes"></div>
+  <button class="enviar" id="btn-enviar" onclick="enviar()" disabled>📨 Enviar simulado (responda todas)</button>
+
+  <div class="gab" id="gab">
+    <b>🔑 Gabarito comentado:</b> digite o código SIM que apareceu no topo.<br>
+    <input id="gab-in" placeholder="SIM-XX-YY"><button onclick="abrirGab()">Ver gabarito</button>
+    <div class="msg" id="gab-msg"></div>
+  </div>
+
+  <div class="fim" id="fim">
+    <h3>🏆 Fim de jogo! Trilha completa.</h3>
+    <p>Agora todos os materiais ficam abertos para revisar quantas vezes quiser até a prova.</p>
+    <a href="index.html">🏠 Voltar ao início</a>
+  </div>
+
+  <div class="rodape">Feito com carinho para o jovem aprendiz. 🕹️ Boa prova!</div>
+</div>
+
+<div class="modal-bg" id="lock">
+  <div class="modal">
+    <div class="big">🔒</div>
+    <p><b>Esta etapa ainda está trancada.</b></p>
+    <p id="lock-txt">Para abrir o Simulado, conclua o Resumo.</p>
+    <a href="index.html">Voltar ao início</a>
+  </div>
+</div>
+<div class="modal-bg" id="modal">
+  <div class="modal">
+    <p id="modal-txt"></p>
+    <button onclick="fecharModal()" id="modal-ok">Ok</button>
+    <button class="mini" onclick="fecharModal()" id="modal-cancel" style="display:none;margin-left:8px">Cancelar</button>
+  </div>
+</div>
+
+<script>
+/* ====== TRILHA COM CADEADOS ====== */
+var KIT='fliperama_enigma_mat6';
+var TRILHA=[
+ {id:'leitura', chave:KIT+'_leitura_v1', nome:'Leitura Estendida', arquivo:'leitura-estendida.html', emoji:'📖'},
+ {id:'resumo', chave:KIT+'_resumo_v1', nome:'Resumo', arquivo:'resumo.html', emoji:'🗺️'},
+ {id:'simulado', chave:KIT+'_simulado_v1', nome:'Simulado', arquivo:'simulado.html', emoji:'📝'}
+];
+function lerJSON(k){ try{ var s=localStorage.getItem(k); return s?JSON.parse(s):null; }catch(e){ return null; } }
+function trilhaLiberada(){ var t=lerJSON(KIT+'_trilha_v1'); return !!(t&&t.liberadoPelosPais); }
+function etapaConcluida(id){ var e=TRILHA.filter(function(t){return t.id===id;})[0]; var d=lerJSON(e.chave); return !!(d&&d.concluido); }
+function podeAbrir(id){ var idx=TRILHA.map(function(t){return t.id;}).indexOf(id); if(idx<=0||trilhaLiberada()) return true; return etapaConcluida(TRILHA[idx-1].id); }
+function marcarNav(){
+  var links=document.querySelectorAll('#nav a[data-etapa]');
+  for(var i=0;i<links.length;i++){ var id=links[i].getAttribute('data-etapa'); if(!podeAbrir(id)){ links[i].classList.add('lock'); } }
+}
+function checarTrava(){
+  if(podeAbrir('simulado')) return true;
+  var R=lerJSON(KIT+'_resumo_v1'); var rol=Math.round((R&&R.rolagemMax)||0);
+  document.getElementById('lock-txt').textContent='Para abrir o Simulado, conclua o Resumo: role até o fim da página e clique em "✅ Li o resumo até o fim" (rolagem atual: '+rol+'%).';
+  document.getElementById('lock').classList.add('show');
+  document.querySelector('.wrap').style.filter='blur(8px)';
+  document.querySelector('.wrap').setAttribute('aria-hidden','true');
+  return false;
+}
+
+/* ====== QUESTÕES (Callis Matemática 6 – Livro 2, lido no P+) — a correta é guardada pelo id ====== */
+var Q=[
+ {"tipo":"mc","tema":"Plano cartesiano","p":"No plano cartesiano, o <b>eixo horizontal</b> (o eixo deitado) recebe o nome de:","alts":[
+   {"id":"a","t":"eixo das abscissas.","e":"Correto (p. 66): o eixo horizontal é o das abscissas; o vertical é o das ordenadas.","ok":true},
+   {"id":"b","t":"eixo das ordenadas.","e":"O eixo das ordenadas é o vertical, o que fica em pé."},
+   {"id":"c","t":"eixo da origem.","e":"Origem é um ponto — o cruzamento dos dois eixos —, não um eixo."},
+   {"id":"d","t":"eixo do par ordenado.","e":"Par ordenado é a dupla de números que localiza um ponto, não um eixo."}]},
+
+ {"tipo":"mc","tema":"Plano cartesiano","p":"O ponto em que os dois eixos do plano cartesiano se interceptam é chamado de:","alts":[
+   {"id":"a","t":"origem.","e":"Correto (p. 66): a origem é o ponto onde os eixos se cruzam, de coordenadas (0, 0).","ok":true},
+   {"id":"b","t":"abscissa.","e":"Abscissa é a distância medida no eixo horizontal, o primeiro número do par."},
+   {"id":"c","t":"ordenada.","e":"Ordenada é a distância medida no eixo vertical, o segundo número do par."},
+   {"id":"d","t":"translação.","e":"Translação é o deslocamento de uma figura sem mudar a forma."}]},
+
+ {"tipo":"mc","tema":"Par ordenado","p":"Os matemáticos combinaram uma ordem única para escrever as coordenadas de um ponto. Num par ordenado (a, b), essa ordem é:","alts":[
+   {"id":"a","t":"a é a abscissa e b é a ordenada.","e":"Correto (p. 67): a ordem adotada é sempre (abscissa, ordenada).","ok":true},
+   {"id":"b","t":"a é a ordenada e b é a abscissa.","e":"Está invertido: a ordenada é sempre o segundo número."},
+   {"id":"c","t":"tanto faz a ordem, desde que os números estejam certos.","e":"A ordem muda a localização — foi justamente para evitar confusão que a ordem foi combinada."},
+   {"id":"d","t":"a e b precisam ser sempre números iguais.","e":"Não há essa exigência: (2, 5) é um par ordenado normal."}]},
+
+ {"tipo":"mc","tema":"Par ordenado","p":"No plano cartesiano, os pontos <b>(5, 6)</b> e <b>(6, 5)</b>:","alts":[
+   {"id":"a","t":"são pontos diferentes, porque a ordem dos números altera a localização.","e":"Correto (p. 67): pontos diferentes correspondem a pares ordenados diferentes.","ok":true},
+   {"id":"b","t":"são o mesmo ponto, porque os números são os mesmos.","e":"Essa é a pegadinha clássica: os números são os mesmos, mas a ordem muda o lugar."},
+   {"id":"c","t":"são o mesmo ponto, porque estão sempre na mesma reta.","e":"Não estão no mesmo lugar, e isso não teria a ver com estar na mesma reta."},
+   {"id":"d","t":"não podem existir no mesmo plano cartesiano.","e":"Podem, sim: os dois são pontos perfeitamente válidos, só que em posições diferentes."}]},
+
+ {"tipo":"mc","tema":"Pontos nos eixos","p":"Qual é a <b>ordenada</b> de um ponto qualquer que está sobre o <b>eixo das abscissas</b>?","alts":[
+   {"id":"a","t":"É sempre 0.","e":"Correto (p. 68): quem está sobre o eixo horizontal não subiu nada, então a ordenada é 0. Ex.: (6, 0).","ok":true},
+   {"id":"b","t":"É sempre 1.","e":"O 1 indicaria uma unidade acima do eixo — o ponto já não estaria sobre ele."},
+   {"id":"c","t":"É sempre igual à abscissa.","e":"Isso valeria só para pontos como (3, 3), que não estão sobre o eixo."},
+   {"id":"d","t":"Depende do ponto: pode ser qualquer número.","e":"Sobre o eixo das abscissas a ordenada é obrigatoriamente 0."}]},
+
+ {"tipo":"mc","tema":"Translação","p":"Sobre a <b>translação</b> de uma figura no plano cartesiano, é correto afirmar que:","alts":[
+   {"id":"a","t":"a figura muda de posição, mas mantém a mesma forma e o mesmo tamanho.","e":"Correto (p. 69): na translação o objeto se desloca sem alterar a forma; as figuras ficam congruentes.","ok":true},
+   {"id":"b","t":"a figura aumenta de tamanho mantendo a mesma forma.","e":"Isso é uma ampliação (Cap. 19), não uma translação."},
+   {"id":"c","t":"a figura gira em torno de um ponto fixo.","e":"Girar é outra transformação; transladar é apenas deslocar."},
+   {"id":"d","t":"a figura muda de forma ao mudar de lugar.","e":"Na translação a forma é exatamente a mesma — por isso as figuras são congruentes."}]},
+
+ {"tipo":"rom","tema":"Plano cartesiano e translação","p":"Sobre o plano cartesiano e a translação, analise as afirmativas:","itens":[
+   {"n":"I","t":"O eixo das ordenadas é o eixo vertical do plano cartesiano.","ok":true,"e":"Verdadeira (p. 66)."},
+   {"n":"II","t":"A origem do plano cartesiano tem coordenadas (0, 0).","ok":true,"e":"Verdadeira (p. 68): é o cruzamento dos dois eixos."},
+   {"n":"III","t":"Todo ponto que está sobre o eixo das ordenadas tem abscissa igual a 0.","ok":true,"e":"Verdadeira (p. 68). Ex.: K (0, 3)."},
+   {"n":"IV","t":"Numa translação, a figura muda de forma e de tamanho.","ok":false,"e":"Falsa (p. 69): a translação só desloca; forma e tamanho ficam iguais."}],
+  "alts":[
+   {"id":"a","t":"Apenas I, II e III estão corretas.","e":"Correto: só a IV é falsa, porque a translação não altera forma nem tamanho.","ok":true},
+   {"id":"b","t":"Apenas I e II estão corretas.","e":"A III também é verdadeira: sobre o eixo das ordenadas a abscissa é 0."},
+   {"id":"c","t":"Apenas II e IV estão corretas.","e":"A IV é falsa e a I e a III são verdadeiras."},
+   {"id":"d","t":"Todas estão corretas.","e":"A IV é falsa: a translação não muda forma nem tamanho."}]},
+
+ {"tipo":"mc","tema":"Semelhança","p":"Duas figuras são <b>semelhantes</b> quando:","alts":[
+   {"id":"a","t":"têm ângulos correspondentes congruentes e lados correspondentes proporcionais.","e":"Correto (p. 83): as duas condições precisam valer ao mesmo tempo.","ok":true},
+   {"id":"b","t":"têm a mesma forma e exatamente o mesmo tamanho.","e":"Mesma forma e mesmo tamanho é a definição de figuras congruentes."},
+   {"id":"c","t":"têm pelo menos um lado com a mesma medida.","e":"Um lado igual não garante nada: todos os lados precisam ser proporcionais."},
+   {"id":"d","t":"têm o mesmo perímetro.","e":"Figuras semelhantes de tamanhos diferentes têm perímetros diferentes."}]},
+
+ {"tipo":"mc","tema":"Razão de semelhança","p":"Dois triângulos são semelhantes e a razão de semelhança entre eles é <b>4</b>. Um lado do triângulo menor mede <b>7 cm</b>. O lado correspondente do triângulo maior mede:","alts":[
+   {"id":"a","t":"28 cm","e":"Correto (p. 86): com o lado menor em mãos, multiplica-se pela razão — 4 · 7 = 28 cm.","ok":true},
+   {"id":"b","t":"11 cm","e":"Aqui a razão foi somada ao lado (4 + 7). A razão multiplica, não soma."},
+   {"id":"c","t":"1,75 cm","e":"Esse é 7 ÷ 4. Divide-se quando se conhece o lado MAIOR; aqui o 7 cm é do menor."},
+   {"id":"d","t":"7 cm","e":"Se o lado continuasse igual, a razão de semelhança seria 1, e não 4."}]},
+
+ {"tipo":"mc","tema":"Razão de semelhança","p":"A razão de semelhança entre duas figuras é <b>5</b>. Sabendo que o lado da figura <b>maior</b> mede <b>100 mm</b>, o lado correspondente da figura menor mede:","alts":[
+   {"id":"a","t":"20 mm","e":"Correto (p. 86): “100 dividido por qual número resulta em 5?” → 100 ÷ 5 = 20 mm.","ok":true},
+   {"id":"b","t":"500 mm","e":"Multiplicar daria uma figura ainda maior; aqui se procura a MENOR."},
+   {"id":"c","t":"95 mm","e":"O 5 foi subtraído do 100. A razão divide, não subtrai."},
+   {"id":"d","t":"105 mm","e":"O 5 foi somado ao 100. A razão de semelhança não é soma."}]},
+
+ {"tipo":"mc","tema":"Razão de semelhança","p":"Sobre a <b>razão de semelhança</b>, é correto dizer que ela é:","alts":[
+   {"id":"a","t":"um número sem unidade, que indica quantas vezes a figura foi ampliada ou reduzida.","e":"Correto (p. 87): é a divisão de dois lados correspondentes, então as unidades se cancelam.","ok":true},
+   {"id":"b","t":"uma medida dada sempre em centímetros.","e":"Ela não tem unidade — não se escreve “razão de 4 cm”, e sim “razão 4”."},
+   {"id":"c","t":"a soma das medidas dos lados da figura.","e":"A soma das medidas dos lados é o perímetro, outra coisa."},
+   {"id":"d","t":"a quantidade de lados que a figura tem.","e":"O número de lados não muda numa ampliação ou redução."}]},
+
+ {"tipo":"mc","tema":"Ampliação e redução","p":"Ao <b>reduzir pela metade</b> um desenho usando a malha quadriculada, o que acontece?","alts":[
+   {"id":"a","t":"Cada traço do desenho passa a ter metade da medida original.","e":"Correto (p. 82): no exemplo do barco, 2 · PA = PA’ e 2 · AB = A’B’ — tudo reduzido igualmente.","ok":true},
+   {"id":"b","t":"Apenas a largura é reduzida; a altura fica igual.","e":"Reduzir só um lado distorce a figura, e ela deixa de ser semelhante à original."},
+   {"id":"c","t":"Os ângulos da figura também ficam com metade da medida.","e":"Os ângulos correspondentes continuam congruentes: só as medidas dos lados mudam."},
+   {"id":"d","t":"A quantidade de quadradinhos ocupados cai exatamente pela metade.","e":"Não: o próprio livro mostra que a razão dos lados e a dos quadradinhos são diferentes (4 e 16 para razão 2)."}]},
+
+ {"tipo":"rom","tema":"Semelhança e porcentagem","p":"Sobre semelhança de figuras e porcentagem, analise as afirmativas:","itens":[
+   {"n":"I","t":"Figuras semelhantes têm ângulos correspondentes congruentes e lados correspondentes proporcionais.","ok":true,"e":"Verdadeira (p. 83)."},
+   {"n":"II","t":"A razão de semelhança é sempre expressa em centímetros.","ok":false,"e":"Falsa (p. 87): é um número sem unidade."},
+   {"n":"III","t":"7% corresponde à fração 7/100 e ao número decimal 0,07.","ok":true,"e":"Verdadeira (p. 101): são as três representações do mesmo valor."},
+   {"n":"IV","t":"Numa ampliação de razão de semelhança 2, a medida de cada lado da figura original é dobrada.","ok":true,"e":"Verdadeira (p. 86)."}],
+  "alts":[
+   {"id":"a","t":"Apenas I, III e IV estão corretas.","e":"Correto: só a II é falsa, porque a razão de semelhança não tem unidade.","ok":true},
+   {"id":"b","t":"Apenas I e II estão corretas.","e":"A II é justamente a falsa, e a III e a IV são verdadeiras."},
+   {"id":"c","t":"Apenas III e IV estão corretas.","e":"A I também é verdadeira — é a própria definição de figuras semelhantes."},
+   {"id":"d","t":"Todas estão corretas.","e":"A II é falsa: a razão de semelhança é um número sem unidade."}]},
+
+ {"tipo":"mc","tema":"Porcentagem","p":"A porcentagem <b>24%</b> corresponde, respectivamente, à fração e ao número decimal:","alts":[
+   {"id":"a","t":"24/100 e 0,24","e":"Correto (p. 100): porcentagem é fração de denominador 100, e 24/100 = 0,24.","ok":true},
+   {"id":"b","t":"24/10 e 2,4","e":"Denominador 10 daria 240%. Porcentagem sempre usa o 100."},
+   {"id":"c","t":"24/1000 e 0,024","e":"Esse valor seria 2,4%, dez vezes menor."},
+   {"id":"d","t":"100/24 e 4,16","e":"A fração foi invertida: o 100 tem de ficar no denominador."}]},
+
+ {"tipo":"mc","tema":"Porcentagem","p":"Numa olimpíada de Matemática, foram premiados <b>6 dos 25</b> alunos da turma A e <b>5 dos 20</b> alunos da turma B. Qual turma teve o melhor desempenho?","alts":[
+   {"id":"a","t":"A turma B, porque 25% é maior que 24%.","e":"Correto (p. 100): 6/25 = 24/100 = 24% e 5/20 = 25/100 = 25%.","ok":true},
+   {"id":"b","t":"A turma A, porque 6 premiados é mais do que 5.","e":"Essa é a pegadinha: as turmas têm tamanhos diferentes, então comparar só a quantidade engana."},
+   {"id":"c","t":"As duas tiveram o mesmo desempenho.","e":"Não: 24% e 25% são valores diferentes."},
+   {"id":"d","t":"A turma A, porque tem mais alunos no total.","e":"Ter mais alunos não melhora o desempenho — pelo contrário, dilui a porcentagem."}]},
+
+ {"tipo":"mc","tema":"Cálculo de porcentagem","p":"Numa sala de aula com <b>40 alunos</b>, 55% são meninas. Quantos são os meninos?","alts":[
+   {"id":"a","t":"18 meninos","e":"Correto (p. 102): os meninos são 100% − 55% = 45%, e 45% de 40 = 18.","ok":true},
+   {"id":"b","t":"22 meninos","e":"Esse é 55% de 40, ou seja, o número de meninas."},
+   {"id":"c","t":"20 meninos","e":"Isso seria metade da turma, 50% — mas os meninos são 45%."},
+   {"id":"d","t":"25 meninos","e":"Esse valor não corresponde a nenhuma das porcentagens do problema."}]},
+
+ {"tipo":"mc","tema":"Cálculo de porcentagem","p":"A lei garante <b>5%</b> das vagas de estacionamento para idosos. Numa região central com <b>5 500 vagas</b>, quantas devem ser reservadas?","alts":[
+   {"id":"a","t":"275 vagas","e":"Correto (p. 103): 5% = 0,05, e 0,05 · 5 500 = 275.","ok":true},
+   {"id":"b","t":"55 vagas","e":"Esse é 1% de 5 500. Falta multiplicar por 5."},
+   {"id":"c","t":"2 750 vagas","e":"Esse é 50% de 5 500, dez vezes mais que o pedido."},
+   {"id":"d","t":"1 100 vagas","e":"Esse é 20% de 5 500."}]},
+
+ {"tipo":"mc","tema":"Cálculo de porcentagem","p":"(Saresp) Helena precisou reajustar em <b>6%</b> o preço de um sanduíche que custava <b>R$ 2,50</b>. O novo preço é:","alts":[
+   {"id":"a","t":"R$ 2,65","e":"Correto: 6% de 2,50 = 0,15; somando, 2,50 + 0,15 = R$ 2,65.","ok":true},
+   {"id":"b","t":"R$ 2,45","e":"Aqui o valor diminuiu — mas o enunciado fala em aumento."},
+   {"id":"c","t":"R$ 2,55","e":"Isso seria um aumento de 2%, não de 6%."},
+   {"id":"d","t":"R$ 2,75","e":"Isso seria um aumento de 10% (R$ 0,25)."}]},
+
+ {"tipo":"mc","tema":"Juros simples","p":"Uma televisão custa <b>R$ 1.250,00 à vista</b> e <b>R$ 1.400,00 a prazo</b>. O valor pago a mais, ou seja, os <b>juros</b>, é de:","alts":[
+   {"id":"a","t":"R$ 150,00","e":"Correto (p. 107): 1 400,00 − 1 250,00 = 150,00. Esse é o juro do parcelamento.","ok":true},
+   {"id":"b","t":"R$ 1.400,00","e":"Esse é o preço total a prazo, e não o quanto se pagou a mais."},
+   {"id":"c","t":"R$ 12,00","e":"O 12 aparece no problema como a porcentagem (12%), não como o valor em reais."},
+   {"id":"d","t":"R$ 1,50","e":"O 1,5 aparece como a taxa mensal (1,5% ao mês), não como o juro total."}]},
+
+
+ {"tipo":"mc","tema":"Fórmula dos juros","p":"Maria fez um empréstimo de <b>R$ 8.000,00</b> para pagar ao final de <b>5 meses</b>, a uma taxa de juros simples de <b>2% ao mês</b>. O juro e o montante são, respectivamente:","alts":[
+   {"id":"a","t":"R$ 800,00 e R$ 8.800,00","e":"Correto (p. 109): J = 8 000 · 0,02 · 5 = 800 e M = 8 000 + 800 = 8 800.","ok":true},
+   {"id":"b","t":"R$ 160,00 e R$ 8.160,00","e":"Esse é o juro de um mês só. Falta multiplicar pelos 5 meses."},
+   {"id":"c","t":"R$ 800,00 e R$ 8.000,00","e":"O juro está certo, mas o montante tem de somar o capital com os juros."},
+   {"id":"d","t":"R$ 80,00 e R$ 8.080,00","e":"Esse seria o juro de uma taxa de 0,2% ao mês — a vírgula foi para o lugar errado."}]},
+
+
+ {"tipo":"mc","tema":"Fórmula dos juros","p":"Luciano pediu um empréstimo de <b>R$ 300,00</b> a uma taxa de juros simples de <b>36% ao ano</b>. Quanto ele deverá depois de <b>7 meses</b>?","alts":[
+   {"id":"a","t":"R$ 363,00","e":"Correto: 36% ao ano ÷ 12 = 3% ao mês. J = 300 · 0,03 · 7 = 63, e o montante é 300 + 63 = 363.","ok":true},
+   {"id":"b","t":"R$ 63,00","e":"Esse é só o juro. A pergunta é quanto ele deverá, ou seja, o montante."},
+   {"id":"c","t":"R$ 756,00","e":"Aqui a taxa anual foi usada com o tempo em meses, sem converter. Taxa e tempo têm de estar na mesma unidade."},
+   {"id":"d","t":"R$ 408,00","e":"Esse seria o montante depois de um ano inteiro (36% de 300 = 108)."}]},
+
+ {"tipo":"rom","tema":"Juros simples e equações","p":"Sobre juros simples e equações, analise as afirmativas:","itens":[
+   {"n":"I","t":"O montante é o resultado da soma do capital com os juros.","ok":true,"e":"Verdadeira (p. 107)."},
+   {"n":"II","t":"Na fórmula J = c · i · t, a letra i representa o tempo da aplicação.","ok":false,"e":"Falsa (p. 109): o i é a taxa em porcentagem; o tempo é o t."},
+   {"n":"III","t":"A sentença 12 + 8 = 20 é um exemplo de equação.","ok":false,"e":"Falsa (p. 120): é apenas uma sentença matemática — falta o valor desconhecido."},
+   {"n":"IV","t":"A operação inversa da multiplicação é a divisão.","ok":true,"e":"Verdadeira (p. 121): é por isso que 3 · T = 12 se resolve com 12 ÷ 3."}],
+  "alts":[
+   {"id":"a","t":"Apenas I e IV estão corretas.","e":"Correto: a II confunde taxa com tempo e a III chama de equação o que é só uma sentença matemática.","ok":true},
+   {"id":"b","t":"Apenas I, II e IV estão corretas.","e":"A II é falsa: na fórmula, o i é a taxa e não o tempo."},
+   {"id":"c","t":"Apenas II e III estão corretas.","e":"São justamente as duas falsas."},
+   {"id":"d","t":"Todas estão corretas.","e":"A II e a III são falsas."}]},
+
+ {"tipo":"mc","tema":"Equações","p":"Segundo o livro, uma <b>equação</b> é:","alts":[
+   {"id":"a","t":"uma igualdade matemática com pelo menos um valor desconhecido.","e":"Correto (p. 120): é a definição exata, e o desconhecido pode ser um quadradinho ou uma letra.","ok":true},
+   {"id":"b","t":"qualquer conta feita com números e sinais.","e":"Uma conta sem igualdade e sem desconhecido não é equação."},
+   {"id":"c","t":"uma igualdade em que todos os valores são conhecidos.","e":"Essa é a definição de sentença matemática."},
+   {"id":"d","t":"uma comparação entre dois números diferentes.","e":"Equação trabalha com igualdade, e não com comparação de diferentes."}]},
+
+ {"tipo":"mc","tema":"Equações","p":"Qual das sentenças a seguir <b>NÃO</b> é uma equação?","alts":[
+   {"id":"a","t":"12 + 8 = 20","e":"Correto (p. 120): todos os valores são conhecidos, então é apenas uma sentença matemática.","ok":true},
+   {"id":"b","t":"x + 3 = 5","e":"É equação: tem igualdade e o valor desconhecido x."},
+   {"id":"c","t":"3 · T = 12","e":"É equação: o T é o valor desconhecido."},
+   {"id":"d","t":"2x − 4 = 80","e":"É equação: o x é o valor desconhecido."}]},
+
+ {"tipo":"mc","tema":"Equações e problemas","p":"Foram feitas <b>300 trufas</b> para uma festa. Cada convidado comeu exatamente <b>6 trufas</b> e ainda <b>sobraram 30</b>. Considerando que havia “x” convidados, a equação que representa a situação é:","alts":[
+   {"id":"a","t":"6x + 30 = 300","e":"Correto (p. 124): as trufas comidas (6x) mais a sobra (30) dão o total feito (300).","ok":true},
+   {"id":"b","t":"6x − 30 = 300","e":"A sobra não é descontada do total: ela faz parte das 300 trufas feitas."},
+   {"id":"c","t":"x + 30 = 300","e":"Falta multiplicar por 6: cada convidado comeu 6 trufas, não uma."},
+   {"id":"d","t":"x − 30 = 300","e":"Faltam o 6 por convidado e o sinal correto da sobra."}]},
+
+ {"tipo":"mc","tema":"Linguagem algébrica","p":"Considerando uma sequência de <b>três números consecutivos</b> cujo termo central é <b>x</b>, a representação algébrica correta é:","alts":[
+   {"id":"a","t":"x − 1; x; x + 1","e":"Correto (p. 124): se o x é o do meio, o anterior é x − 1 e o seguinte é x + 1.","ok":true},
+   {"id":"b","t":"x; x + 1; x + 2","e":"Aqui o x seria o PRIMEIRO da sequência, e não o termo central."},
+   {"id":"c","t":"x ÷ 2; x; 2x","e":"Metade e dobro não são números consecutivos."},
+   {"id":"d","t":"x ÷ 3; x; 3x","e":"Terça parte e triplo também não são consecutivos."}]},
+
+ {"tipo":"mc","tema":"Linguagem algébrica","p":"Um número par P é múltiplo de 2 e pode ser escrito como P = 2n. Um número ímpar é sempre consecutivo a um número par. Logo, a representação algébrica de um número <b>ímpar</b> é:","alts":[
+   {"id":"a","t":"2n + 1","e":"Correto (p. 125): é o número que vem logo depois do par 2n.","ok":true},
+   {"id":"b","t":"3n","e":"3n é múltiplo de 3 e pode ser par (por exemplo, 3 · 2 = 6)."},
+   {"id":"c","t":"2(n + 1)","e":"Isso é 2n + 2, que continua sendo par."},
+   {"id":"d","t":"3n + 1","e":"Também pode dar número par (por exemplo, com n = 1 dá 4)."}]},
+
+ {"tipo":"mc","tema":"Linguagem algébrica","p":"Um quadrado de lado <b>x</b> tem área e perímetro definidos, respectivamente, por:","alts":[
+   {"id":"a","t":"x² e 4x","e":"Correto (p. 125): a área é lado vezes lado e o perímetro é a soma dos 4 lados iguais.","ok":true},
+   {"id":"b","t":"x⁴ e 4x","e":"O perímetro está certo, mas a área de um quadrado é x², e não x⁴."},
+   {"id":"c","t":"x² e 2x","e":"A área está certa, mas 2x seria a soma de apenas dois lados."},
+   {"id":"d","t":"x⁴ e 2x","e":"As duas expressões estão erradas."}]},
+
+ {"tipo":"mc","tema":"Equações e problemas","p":"Marcos comprou <b>3 sanduíches</b>, pagou com uma nota de <b>R$ 50,00</b> e recebeu <b>R$ 27,50</b> de troco. Quanto custou cada sanduíche?","alts":[
+   {"id":"a","t":"R$ 7,50","e":"Correto (p. 123): 3S + 27,50 = 50,00 → 3S = 22,50 → S = 7,50.","ok":true},
+   {"id":"b","t":"R$ 22,50","e":"Esse é o valor dos TRÊS sanduíches juntos. Falta dividir por 3."},
+   {"id":"c","t":"R$ 16,67","e":"Isso seria dividir os R$ 50,00 por 3, esquecendo o troco."},
+   {"id":"d","t":"R$ 9,17","e":"Isso seria dividir o troco de R$ 27,50 por 3, que não é o que o problema pede."}]},
+
+ {"tipo":"mc","tema":"Equação como fórmula","p":"A polegada equivale a <b>2,54 cm</b>, e a equação <b>C = 2,54 · P</b> transforma polegadas em centímetros. Uma televisão de <b>50 polegadas</b> tem, na diagonal:","alts":[
+   {"id":"a","t":"127 cm","e":"Correto (p. 125): C = 2,54 · 50 = 127 cm.","ok":true},
+   {"id":"b","t":"19,68 cm","e":"Aqui foi feita a divisão 50 ÷ 2,54, e a fórmula manda multiplicar."},
+   {"id":"c","t":"52,54 cm","e":"Aqui o 2,54 foi somado ao 50 em vez de multiplicado."},
+   {"id":"d","t":"254 cm","e":"Esse seria o resultado para 100 polegadas, e não para 50."}]}
+];
+
+/* ====== EMBARALHAMENTO COM SEMENTE FIXA (mulberry32) — a correta é guardada pelo id ====== */
+function mulberry32(a){ return function(){ a|=0; a=a+0x6D2B79F5|0; var t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+var rnd=mulberry32(20261108);
+Q.forEach(function(q){ var arr=q.alts.slice(); for(var i=arr.length-1;i>0;i--){ var j=Math.floor(rnd()*(i+1)); var tmp=arr[i]; arr[i]=arr[j]; arr[j]=tmp; } q.ordem=arr; });
+var OBJ=Q.length;
+
+/* ====== ESTADO ====== */
+var CHAVE=KIT+'_simulado_v1'; var mem={}; var estado=carregar();
+function carregar(){ try{ var s=localStorage.getItem(CHAVE); if(s) return JSON.parse(s);}catch(e){ if(mem[CHAVE]) return JSON.parse(mem[CHAVE]); } return {resp:{},enviado:false}; }
+function salvar(){ var s=JSON.stringify(estado); try{ localStorage.setItem(CHAVE,s);}catch(e){ mem[CHAVE]=s; } var d=new Date(); document.getElementById('salvo').textContent='💾 Salvo às '+d.toLocaleTimeString('pt-BR')+' de '+d.toLocaleDateString('pt-BR'); }
+var LETRAS='ABCDEFGHJKLMNPQRSTUVWXYZ';
+function gerarCodigo(ac){ var xx=(ac<10?'0':'')+ac; var yy=LETRAS[Math.floor(Math.random()*LETRAS.length)]+LETRAS[Math.floor(Math.random()*LETRAS.length)]; return 'SIM-'+xx+'-'+yy; }
+function respondida(i){ var r=estado.resp[i]; return !(r===undefined||r===null||String(r).trim()===''); }
+function acertou(i){ var q=Q[i], r=estado.resp[i]; var a=q.alts.filter(function(x){return x.id===r;})[0]; return !!(a&&a.ok); }
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;'); }
+
+function render(){
+  var c=document.getElementById('questoes'); var h=''; var G=estado.gabarito;
+  Q.forEach(function(q,i){
+    var tipoTxt={mc:'Múltipla escolha',rom:'Números romanos'}[q.tipo];
+    h+='<div class="q" id="q'+i+'"><span class="tipo '+q.tipo+'">'+tipoTxt+'</span><div class="num">Questão '+(i+1)+' de '+Q.length+' · '+q.tema+'</div><h3>'+q.p+'</h3>';
+    if(q.tipo==='rom'){
+      q.itens.forEach(function(it){ var cls='afirm'+(G?(it.ok?' ok':' no'):''); h+='<div class="'+cls+'">'+it.n+'. '+it.t+(G?'<div class="exp show">'+(it.ok?'✅ ':'❌ ')+it.e+'</div>':'')+'</div>'; });
+    }
+    q.ordem.forEach(function(a,k){
+      var letra='abcd'[k]; var sel=estado.resp[i]===a.id; var cls='alt'+(sel?' sel':'');
+      if(G){ if(a.ok) cls+=' certa'; else if(sel) cls+=' marcada-errada'; else cls+=' errada'; }
+      h+='<label class="'+cls+'"><input type="radio" name="q'+i+'" value="'+a.id+'" '+(sel?'checked':'')+' '+(estado.enviado?'disabled':'')+' onchange="marcar('+i+',\''+a.id+'\')"> <b>'+letra+')</b> '+a.t+(G?'<div class="exp show">'+(a.ok?'✅ ':'')+a.e+'</div>':'')+'</label>';
+    });
+    h+='</div>';
+  });
+  c.innerHTML=h; atualizarBarra(); if(estado.enviado) mostrarEnviado();
+}
+function marcar(i,v){ if(estado.enviado) return; estado.resp[i]=v; salvar(); var q=document.getElementById('q'+i); var labs=q.querySelectorAll('.alt'); for(var k=0;k<labs.length;k++){ labs[k].classList.toggle('sel', labs[k].querySelector('input').value===v); } atualizarBarra(); }
+function atualizarBarra(){ var n=0; Q.forEach(function(q,i){ if(respondida(i)) n++; }); document.getElementById('barra').style.width=(n/Q.length*100)+'%'; var b=document.getElementById('btn-enviar'); if(!estado.enviado){ b.disabled=n<Q.length; b.textContent=n<Q.length?'📨 Enviar simulado ('+n+' de '+Q.length+' respondidas)':'📨 Enviar simulado'; } }
+function enviar(){
+  if(estado.enviado) return;
+  var ac=0; Q.forEach(function(q,i){ if(acertou(i)===true) ac++; });
+  estado.acertos=ac; estado.objetivas=OBJ; estado.codigo=gerarCodigo(ac); estado.enviado=true; estado.concluido=true; estado.concluidoEm=new Date().toISOString();
+  salvar(); render(); window.scrollTo({top:0,behavior:'smooth'});
+}
+function mostrarEnviado(){
+  var b=document.getElementById('btn-enviar'); b.disabled=true; b.textContent='✅ Simulado enviado — respostas travadas';
+  document.getElementById('codigo').classList.add('show'); document.getElementById('cod').textContent=estado.codigo;
+  document.getElementById('codtxt').textContent='Anote este código para os pais. Ele abre o gabarito comentado.';
+  document.getElementById('gab').classList.add('show'); document.getElementById('fim').style.display='block';
+}
+function abrirGab(){ var v=document.getElementById('gab-in').value.trim().toUpperCase(); var m=document.getElementById('gab-msg'); if(v===estado.codigo||v==='PAIS-77'){ estado.gabarito=true; salvar(); render(); m.innerHTML='<span style="color:#8ff5bb">Gabarito liberado: '+estado.acertos+' acertos de '+OBJ+' questões.</span>'; } else { m.innerHTML='<span style="color:#ffb3b3">Código incorreto.</span>'; } }
+function exportar(){ var blob=new Blob([JSON.stringify(estado,null,2)],{type:'application/json'}); var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='simulado_fliperama-do-enigma.json'; a.click(); }
+function importar(ev){ var f=ev.target.files[0]; if(!f) return; var r=new FileReader(); r.onload=function(){ try{ estado=JSON.parse(r.result); salvar(); render(); mostrarModal('✅ Progresso importado!',false);}catch(e){ mostrarModal('❌ Arquivo inválido.',false);} }; r.readAsText(f); }
+var acaoZerar=null;
+function pedirZerar(){ acaoZerar=true; mostrarModal('Apagar as respostas deste Simulado? (Se ele já foi enviado, o código e a conclusão são mantidos.)',true); }
+function mostrarModal(txt,confirmar){ document.getElementById('modal-txt').innerHTML=txt; document.getElementById('modal').classList.add('show'); document.getElementById('modal-cancel').style.display=confirmar?'inline-block':'none'; document.getElementById('modal-ok').textContent=confirmar?'Sim, apagar':'Ok';
+  document.getElementById('modal-ok').onclick=function(){ if(confirmar&&acaoZerar){ if(!estado.enviado){ estado={resp:{},enviado:false}; salvar(); render(); fecharModal(); } else { acaoZerar=null; mostrarModal('O Simulado já foi enviado: as respostas ficam travadas. Para refazer do zero, use "Zerar o kit inteiro" no Início.',false); return; } } acaoZerar=null; fecharModal(); }; }
+function fecharModal(){ document.getElementById('modal').classList.remove('show'); }
+
+if(checarTrava()){ render(); } else { marcarNav(); }
+</script>
+</body>
+</html>

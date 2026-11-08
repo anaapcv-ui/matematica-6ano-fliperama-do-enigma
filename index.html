@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fliperama do Enigma · Matemática 6º ano · Kit de Estudos</title>
+<style>
+  :root{
+    --fundo:#140b1f; --fundo2:#1f1230; --borda:#3b2456; --borda2:#5a3880;
+    --verde:#4ef08a; --laranja:#ff9e3d; --ciano:#49dcff; --lilas:#c08cff;
+    --verm:#ff4d6d; --ambar:#ffcc4d; --texto:#f3eefc; --cinza:#b8a6d4;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',system-ui,Arial,sans-serif;font-size:17px;background:
+    radial-gradient(900px 480px at 50% -10%,rgba(192,140,255,.22),transparent 70%),
+    repeating-linear-gradient(0deg,rgba(255,255,255,.015) 0 2px,transparent 2px 4px),var(--fundo);
+    color:var(--texto);line-height:1.65;padding-bottom:60px}
+  .pixel{height:14px;background:
+    repeating-linear-gradient(90deg,#4ef08a 0 14px,transparent 14px 28px) 0 0/112px 7px repeat-x,
+    repeating-linear-gradient(90deg,#ff9e3d 0 14px,transparent 14px 28px) 28px 7px/112px 7px repeat-x,
+    repeating-linear-gradient(90deg,#49dcff 0 14px,transparent 14px 28px) 56px 0/112px 7px repeat-x;opacity:.85}
+  header{background:linear-gradient(135deg,#2a1140,#45186b 45%,#160c24);padding:34px 18px 28px;text-align:center;box-shadow:0 4px 22px rgba(0,0,0,.6);border-bottom:4px solid var(--verde)}
+  header .selo{font-family:'Consolas','Courier New',monospace;font-size:.76rem;letter-spacing:5px;color:#9df5c4;text-transform:uppercase}
+  header h1{font-family:'Consolas','Courier New',monospace;font-size:2rem;margin:10px 0 6px;text-shadow:0 0 16px rgba(78,240,138,.5)}
+  header p{color:#e8dcf7;font-size:.96rem;max-width:620px;margin:0 auto}
+  header .caps{margin-top:10px;font-size:.82rem;color:#cbb6e8;font-family:'Consolas','Courier New',monospace}
+  .wrap{max-width:900px;margin:0 auto;padding:18px}
+  .selo-pais{display:none;background:#0e2a1c;border:1px solid var(--verde);color:#9df5c4;border-radius:10px;padding:9px 14px;text-align:center;margin-bottom:14px;font-size:.9rem}
+  .selo-pais.show{display:block}
+  .como{background:var(--fundo2);border:1px solid var(--borda);border-radius:14px;padding:16px;margin-bottom:20px}
+  .como h2{font-family:'Consolas','Courier New',monospace;color:var(--laranja);font-size:1.1rem;margin-bottom:8px}
+  .como ol{margin:8px 0 0 20px} .como li{margin-bottom:6px}
+  .trilha{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:14px;margin-bottom:22px}
+  .card{position:relative;display:block;text-decoration:none;color:var(--texto);background:var(--fundo2);border:2px solid var(--borda);border-radius:16px;padding:18px;transition:transform .18s,border-color .18s;overflow:hidden}
+  .card:hover{transform:translateY(-3px)}
+  .card .passo{font-family:'Consolas','Courier New',monospace;font-size:.7rem;letter-spacing:2px;color:var(--cinza);text-transform:uppercase}
+  .card .emoji{font-size:2.1rem;margin:6px 0 2px}
+  .card h3{font-family:'Consolas','Courier New',monospace;font-size:1.16rem;margin-bottom:6px}
+  .card p{font-size:.9rem;color:#ded2f0;margin-bottom:10px}
+  .card .estado{font-size:.85rem;font-weight:bold;border-top:1px dashed var(--borda2);padding-top:8px}
+  .card.aberto{border-color:var(--ciano)} .card.aberto .estado{color:var(--ciano)}
+  .card.feito{border-color:var(--verde)} .card.feito .estado{color:var(--verde)}
+  .card.novo{border-color:var(--laranja);box-shadow:0 0 0 3px rgba(255,158,61,.25);animation:brilho 1.6s ease-in-out infinite}
+  .card.novo .estado{color:var(--laranja)}
+  @keyframes brilho{0%,100%{box-shadow:0 0 0 3px rgba(255,158,61,.18)}50%{box-shadow:0 0 0 7px rgba(255,158,61,.06)}}
+  .card.trancado{opacity:.62;filter:grayscale(.65);cursor:not-allowed;border-color:#3a3350;background:#191528}
+  .card.trancado .estado{color:#b9a8d6;font-weight:normal}
+  .card .cadeado{position:absolute;top:14px;right:16px;font-size:1.5rem}
+  .extra{background:var(--fundo2);border:1px dashed var(--borda2);border-radius:14px;padding:16px;margin-bottom:20px}
+  .extra h2{font-family:'Consolas','Courier New',monospace;color:var(--lilas);font-size:1.05rem;margin-bottom:6px}
+  .extra a{display:inline-block;margin-top:8px;background:var(--lilas);color:#21103a;text-decoration:none;font-weight:bold;padding:10px 18px;border-radius:10px}
+  .pais{background:var(--fundo2);border:1px solid var(--borda);border-radius:14px;padding:18px;margin-bottom:18px}
+  .pais h2{font-family:'Consolas','Courier New',monospace;color:var(--ciano);font-size:1.1rem;margin-bottom:8px}
+  .pais p{font-size:.92rem;margin-bottom:8px}
+  .pais input{background:#0f0918;color:var(--texto);border:1px solid var(--borda2);border-radius:8px;padding:10px;font-family:'Consolas','Courier New',monospace;width:170px;margin-right:6px}
+  .pais button{background:var(--ciano);color:#042030;border:none;border-radius:8px;padding:10px 16px;font-weight:bold;cursor:pointer;font-family:inherit}
+  #rel-out{margin-top:12px;font-size:.92rem}
+  #rel-out .bloco{background:#190f28;border:1px solid var(--borda);border-radius:10px;padding:11px;margin-bottom:9px}
+  .liberar{background:var(--verde)!important;color:#06240f!important;margin-top:8px}
+  .perigo{background:var(--verm)!important;color:#2b0710!important;margin-top:8px}
+  .dica{background:#2d1f42;border-left:3px solid var(--ambar);padding:10px 13px;border-radius:0 10px 10px 0;font-size:.88rem;margin-top:10px}
+  .dica b{color:var(--ambar)}
+  .rodape{text-align:center;color:var(--cinza);font-size:.85rem;margin-top:26px}
+  .modal-bg{display:none;position:fixed;inset:0;background:rgba(6,3,12,.9);z-index:99;align-items:center;justify-content:center;padding:20px}
+  .modal-bg.show{display:flex}
+  .modal{background:var(--fundo2);border:2px solid var(--borda2);border-radius:14px;padding:22px;max-width:450px;text-align:center}
+  .modal p{margin-bottom:14px}
+  .modal button{background:var(--verde);color:#06240f;border:none;border-radius:8px;padding:10px 18px;font-weight:bold;cursor:pointer;font-family:inherit}
+  .modal button.mini{background:var(--fundo);color:var(--texto);border:1px solid var(--borda2);margin-left:8px}
+  @media(max-width:600px){ body{font-size:16px} header h1{font-size:1.4rem} }
+</style>
+</head>
+<body>
+<header>
+  <div class="selo">Kit de Estudos · Matemática · 6º ano · CCF</div>
+  <h1>🕹️ FLIPERAMA DO ENIGMA</h1>
+  <p>Treine nas máquinas, destrave uma de cada vez e chegue à partida valendo. Cada máquina é um pedaço do que cai na prova.</p>
+  <div class="caps">Cap. 18 Plano cartesiano · Cap. 19 Semelhança · Cap. 20 Porcentagem e juros · Cap. 21 Equações</div>
+</header>
+<div class="pixel"></div>
+
+<div class="wrap">
+  <div class="selo-pais" id="selo-pais">🔓 Trilha liberada pelos pais — todos os materiais estão abertos.</div>
+
+  <div class="como">
+    <h2>🎮 Como usar este kit</h2>
+    <ol>
+      <li><b>Os materiais abrem um por vez, na ordem.</b> Conclua um para destravar o próximo — é assim que o conteúdo entra na cabeça.</li>
+      <li>Comece pela <b>Leitura Estendida</b>: 13 máquinas com o conteúdo do livro e 3 perguntas em cada uma, para escrever com as suas palavras.</li>
+      <li>Depois vem o <b>Resumo</b>, para fechar as dúvidas que a leitura mostrou.</li>
+      <li>Por último, o <b>Simulado</b> valendo, como se fosse a prova.</li>
+      <li>Terminando tudo, <b>todos os materiais ficam abertos</b> para revisar quantas vezes quiser até o dia da prova.</li>
+    </ol>
+  </div>
+
+  <div class="trilha" id="trilha"></div>
+
+  <div class="extra">
+    <h2>🖨️ Extra · Folha de Regras (para imprimir)</h2>
+    <p>Uma folha A4 em paisagem com todas as regras, fórmulas e pegadinhas dos quatro capítulos, separadas por cor. Imprima e deixe na mesa de estudo — serve para consultar enquanto resolve exercícios no caderno.</p>
+    <a href="mapa-mental-folha-de-regras.pdf" target="_blank">📄 Abrir a Folha de Regras</a>
+  </div>
+
+  <div class="pais">
+    <h2>📊 Relatório para os pais</h2>
+    <p>Digite aqui o <b>código SIM</b> que o aprendiz recebeu ao enviar o Simulado — ou o código fixo da família <b>PAIS-77</b>, que mostra o relatório completo.</p>
+    <input id="cod-in" placeholder="SIM-XX-YY ou PAIS-77"><button onclick="verRelatorio()">Ver relatório</button>
+    <div id="rel-out"></div>
+    <div class="dica"><b>Dica para a família:</b> o progresso fica guardado no navegador <b>daquele aparelho</b>. A leitura feita no tablet não destrava o Resumo no computador — nesse caso, use o <b>📥 Exportar / 📤 Importar</b> dentro de cada material, ou o código <b>PAIS-77</b> aqui em cima para liberar tudo.</div>
+  </div>
+
+  <div class="rodape">Conteúdo tirado do livro Callis Matemática 6 – Livro 2 (caps. 18 a 21).<br>Feito com carinho para o jovem aprendiz. 🕹️ Boa prova!</div>
+</div>
+
+<div class="modal-bg" id="modal">
+  <div class="modal">
+    <p id="modal-txt"></p>
+    <button id="modal-ok">Ok</button>
+    <button class="mini" onclick="fecharModal()" id="modal-cancel" style="display:none">Cancelar</button>
+  </div>
+</div>
+
+<script>
+/* ====== TRILHA COM CADEADOS (módulo comum do kit) ====== */
+var KIT='fliperama_enigma_mat6';
+var TOTAL_MAQ=13, TOTAL_SIM=30;
+var TRILHA=[
+ {id:'leitura', chave:KIT+'_leitura_v1', nome:'Leitura Estendida', arquivo:'leitura-estendida.html', emoji:'📖', desc:'As 13 Máquinas: o conteúdo do livro explicado em linguagem de 6º ano e 3 perguntas em cada máquina, para escrever com as suas palavras.'},
+ {id:'resumo', chave:KIT+'_resumo_v1', nome:'Resumo', arquivo:'resumo.html', emoji:'🗺️', desc:'O Manual do Fliperama: tabelas, fórmulas, post-its, alertas de pegadinha, cartas para virar e glossário — tudo numa página só.'},
+ {id:'simulado', chave:KIT+'_simulado_v1', nome:'Simulado', arquivo:'simulado.html', emoji:'📝', desc:'A Partida Valendo: 30 questões como as da prova — múltipla escolha e números romanos. Código SIM e gabarito comentado.'}
+];
+function lerJSON(k){ try{ var s=localStorage.getItem(k); return s?JSON.parse(s):null; }catch(e){ return null; } }
+function gravarJSON(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
+function trilhaLiberada(){ var t=lerJSON(KIT+'_trilha_v1'); return !!(t&&t.liberadoPelosPais); }
+function dados(id){ var e=TRILHA.filter(function(t){return t.id===id;})[0]; return lerJSON(e.chave); }
+function etapaConcluida(id){ var d=dados(id); return !!(d&&d.concluido); }
+function podeAbrir(idx){ if(idx<=0||trilhaLiberada()) return true; return etapaConcluida(TRILHA[idx-1].id); }
+function fmt(iso){ if(!iso) return ''; var d=new Date(iso); return d.toLocaleDateString('pt-BR')+' '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}); }
+
+function faltaTexto(idx){ /* o que falta no material ANTERIOR para destravar este */
+  var ant=TRILHA[idx-1]; var d=dados(ant.id)||{};
+  if(idx>1 && !etapaConcluida(TRILHA[idx-2].id)) return 'Destrava depois de concluir '+TRILHA[idx-2].nome+' e '+ant.nome+'.';
+  if(ant.id==='leitura'){ var p=d.progresso||{conferidos:0,total:TOTAL_MAQ,chkPendentes:0}; var f=p.total-p.conferidos; return f>0? 'Destrava quando você conferir as '+p.total+' máquinas da Leitura Estendida (faltam '+f+').' : 'Destrava quando você responder a autoavaliação Sim/Não da Leitura Estendida ('+p.chkPendentes+' ponto(s)).'; }
+  if(ant.id==='resumo'){ var r=Math.round(d.rolagemMax||0); return 'Destrava quando você ler o Resumo até o fim e clicar em "Li o resumo até o fim"'+(r?' (rolagem: '+r+'%)':'')+'.'; }
+  return 'Destrava quando você concluir '+ant.nome+'.';
+}
+function renderTrilha(){
+  var c=document.getElementById('trilha'); var h='';
+  TRILHA.forEach(function(t,idx){
+    var feito=etapaConcluida(t.id), aberto=podeAbrir(idx);
+    var cls='card', estado='', cadeado='';
+    if(feito){ cls+=' feito'; estado='✅ Concluído'+(dados(t.id).concluidoEm?' · '+fmt(dados(t.id).concluidoEm):''); }
+    else if(aberto){ var novo=(idx>0 && etapaConcluida(TRILHA[idx-1].id) && !trilhaLiberada()); cls+=novo?' novo':' aberto'; estado=novo?'✨ Novo destravado — pode começar!':(idx===0?'▶️ Comece por aqui':'▶️ Aberto'); }
+    else { cls+=' trancado'; cadeado='<span class="cadeado">🔒</span>'; estado='🔒 '+faltaTexto(idx); }
+    h+='<a class="'+cls+'" href="'+(aberto?t.arquivo:'#')+'" '+(aberto?'':'tabindex="-1" aria-disabled="true" onclick="return false"')+'>'+cadeado+'<div class="passo">Passo '+(idx+1)+' de '+TRILHA.length+'</div><div class="emoji">'+t.emoji+'</div><h3>'+t.nome+'</h3><p>'+t.desc+'</p><div class="estado">'+estado+'</div></a>';
+  });
+  c.innerHTML=h;
+  document.getElementById('selo-pais').classList.toggle('show', trilhaLiberada());
+}
+
+/* ====== RELATÓRIO PARA OS PAIS ====== */
+function relLeitura(){
+  var e=dados('leitura'); if(!e||!e.blocos) return 'Ainda não há registro da Leitura Estendida.';
+  var conf=0,red=0,nao=0,lista=[];
+  Object.keys(e.blocos).forEach(function(i){ var b=e.blocos[i]; if(b.conferido)conf++; if(b.perguntas)Object.keys(b.perguntas).forEach(function(j){ var p=b.perguntas[j]; if(p.red){red++; lista.push('Máquina '+(+i+1)+', pergunta '+(+j+1)+': resposta muito parecida com o texto');} if(p.chk)Object.keys(p.chk).forEach(function(k){ if(p.chk[k]==='nao'){nao++; lista.push('Máquina '+(+i+1)+', pergunta '+(+j+1)+': ponto marcado "Não" na autoavaliação');} }); }); });
+  return '<b>Máquinas conferidas:</b> '+conf+' de '+TOTAL_MAQ+'.<br><b>Respostas muito parecidas com o texto (vermelhas):</b> '+red+'.<br><b>Pontos marcados como "Não" na autoavaliação:</b> '+nao+'.'+(lista.length?'<ul style="margin:6px 0 0 18px">'+lista.map(function(x){return '<li>'+x+'</li>';}).join('')+'</ul>':'');
+}
+function relResumo(){ var e=dados('resumo'); if(!e) return 'Ainda não há registro do Resumo.'; return '<b>Rolagem máxima:</b> '+Math.round(e.rolagemMax||0)+'%. '+(e.concluido?'<b>Lido até o fim</b> em '+fmt(e.concluidoEm)+'.':'Ainda não confirmou a leitura até o fim.'); }
+function relSimulado(){ var e=dados('simulado'); if(!e) return 'Ainda não há registro do Simulado.'; if(!e.enviado) return 'Simulado iniciado ('+Object.keys(e.resp||{}).length+' de '+TOTAL_SIM+' respondidas), ainda não enviado.'; return '<b>Simulado enviado.</b> Acertos: '+e.acertos+' de '+(e.objetivas||TOTAL_SIM)+' questões. Código: '+e.codigo+'.'; }
+function relTrilha(){
+  var h='<ul style="margin:6px 0 0 18px">';
+  TRILHA.forEach(function(t){ var d=dados(t.id); h+='<li>'+t.emoji+' '+t.nome+': '+((d&&d.concluido)?'<span style="color:#9df5c4">concluído em '+fmt(d.concluidoEm)+'</span>':'<span style="color:#ffb3b3">não concluído</span>')+'</li>'; });
+  h+='</ul>'; var tr=lerJSON(KIT+'_trilha_v1');
+  if(tr&&tr.liberadoPelosPais) h+='<p>🔓 Trilha liberada pelos pais em '+fmt(tr.liberadoEm)+'.</p>';
+  else if(tr&&tr.liberadoEm) h+='<p>A trilha foi liberada pelos pais em '+fmt(tr.liberadoEm)+' e trancada de novo em '+fmt(tr.trancadoEm)+'.</p>';
+  return h;
+}
+function verRelatorio(){
+  var v=document.getElementById('cod-in').value.trim().toUpperCase(); var out=document.getElementById('rel-out');
+  var s=dados('simulado')||{};
+  var tudo=(v==='PAIS-77'), okS=(s.codigo&&v===s.codigo);
+  if(!tudo&&!okS){ out.innerHTML='<span style="color:#ffb3b3">Código não reconhecido. Use o código SIM do Simulado ou o código da família PAIS-77.</span>'; return; }
+  var h='';
+  if(tudo) h+='<div class="bloco"><b>📖 Leitura Estendida</b><br>'+relLeitura()+'</div><div class="bloco"><b>🗺️ Resumo</b><br>'+relResumo()+'</div>';
+  h+='<div class="bloco"><b>📝 Simulado</b><br>'+relSimulado()+'</div>';
+  if(tudo){ h+='<div class="bloco"><b>🛤️ Trilha</b>'+relTrilha()+'</div>';
+    h+= trilhaLiberada() ? '<button class="liberar" onclick="trancar()">🔒 Trancar a trilha de novo</button>' : '<button class="liberar" onclick="liberar()">🔓 Liberar todos os materiais</button>';
+    h+=' <button class="perigo" onclick="pedirZerarKit()">🗑️ Zerar o kit inteiro</button>';
+  }
+  out.innerHTML=h;
+}
+function liberar(){ var t=lerJSON(KIT+'_trilha_v1')||{}; t.liberadoPelosPais=true; t.liberadoEm=new Date().toISOString(); gravarJSON(KIT+'_trilha_v1',t); renderTrilha(); verRelatorio(); }
+function trancar(){ var t=lerJSON(KIT+'_trilha_v1')||{}; t.liberadoPelosPais=false; t.trancadoEm=new Date().toISOString(); gravarJSON(KIT+'_trilha_v1',t); renderTrilha(); if(document.getElementById('rel-out').innerHTML) verRelatorio(); }
+function pedirZerarKit(){ mostrarModal('Apagar TODO o progresso deste kit (leitura, resumo, simulado e trilha)? O aprendiz volta ao começo, com só a Leitura Estendida aberta. (Os outros kits não são afetados.)',true,function(){ TRILHA.forEach(function(t){ try{localStorage.removeItem(t.chave);}catch(e){} }); try{localStorage.removeItem(KIT+'_trilha_v1');}catch(e){} renderTrilha(); document.getElementById('rel-out').innerHTML='<span style="color:#9df5c4">Kit zerado. A trilha voltou ao começo.</span>'; }); }
+function mostrarModal(txt,confirmar,fn){ document.getElementById('modal-txt').innerHTML=txt; document.getElementById('modal').classList.add('show'); document.getElementById('modal-cancel').style.display=confirmar?'inline-block':'none'; var ok=document.getElementById('modal-ok'); ok.textContent=confirmar?'Sim, apagar':'Ok'; ok.onclick=function(){ if(fn) fn(); fecharModal(); }; }
+function fecharModal(){ document.getElementById('modal').classList.remove('show'); }
+
+renderTrilha();
+window.addEventListener('pageshow',renderTrilha);
+</script>
+</body>
+</html>

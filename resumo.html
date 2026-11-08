@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resumo · Fliperama do Enigma · Matemática 6º</title>
+<style>
+  :root{
+    --fundo:#140b1f; --fundo2:#1f1230; --borda:#3b2456; --borda2:#5a3880;
+    --verde:#4ef08a; --laranja:#ff9e3d; --ciano:#49dcff; --lilas:#c08cff;
+    --verm:#ff4d6d; --ambar:#ffcc4d; --texto:#f3eefc; --cinza:#b8a6d4; --postit:#ffe066;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',system-ui,Arial,sans-serif;font-size:17.5px;background:
+    radial-gradient(900px 420px at 50% -8%,rgba(255,158,61,.16),transparent 70%),
+    repeating-linear-gradient(0deg,rgba(255,255,255,.015) 0 2px,transparent 2px 4px),var(--fundo);
+    color:var(--texto);line-height:1.68;padding-bottom:60px}
+  .pixel{height:14px;background:
+    repeating-linear-gradient(90deg,#4ef08a 0 14px,transparent 14px 28px) 0 0/112px 7px repeat-x,
+    repeating-linear-gradient(90deg,#ff9e3d 0 14px,transparent 14px 28px) 28px 7px/112px 7px repeat-x,
+    repeating-linear-gradient(90deg,#49dcff 0 14px,transparent 14px 28px) 56px 0/112px 7px repeat-x;opacity:.85}
+  header{background:linear-gradient(120deg,#3a2008,#4d2a0c 50%,#1a0f28);padding:24px 18px;text-align:center;box-shadow:0 4px 18px rgba(0,0,0,.55);border-bottom:4px solid var(--laranja)}
+  header .selo{font-family:'Consolas','Courier New',monospace;font-size:.78rem;letter-spacing:4px;color:#ffd9ad;text-transform:uppercase}
+  header h1{font-family:'Consolas','Courier New',monospace;font-size:1.5rem;margin:8px 0 4px;text-shadow:0 0 12px rgba(255,158,61,.45)}
+  header p{color:#f0e2d2;font-size:.92rem}
+  .wrap{max-width:860px;margin:0 auto;padding:16px}
+  .barra-nav{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:16px 0}
+  .barra-nav a{background:var(--fundo2);color:var(--texto);text-decoration:none;padding:7px 12px;border-radius:20px;font-size:.85rem;border:1px solid var(--borda)}
+  .barra-nav a.on{background:var(--laranja);color:#2b1403;font-weight:bold}
+  .barra-nav a.lock{opacity:.5}
+  .painel{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;background:var(--fundo2);border:1px solid var(--borda);border-radius:12px;padding:10px 14px;margin-bottom:16px;font-size:.85rem}
+  .painel .btns{display:flex;gap:6px;flex-wrap:wrap}
+  button{cursor:pointer;font-family:inherit}
+  .mini{background:var(--fundo);color:var(--texto);border:1px solid var(--borda2);border-radius:8px;padding:6px 10px;font-size:.8rem}
+  .mapa{background:var(--fundo2);border:1px solid var(--borda);border-radius:14px;padding:16px;margin-bottom:18px}
+  .mapa h2{font-family:'Consolas','Courier New',monospace;color:var(--laranja);font-size:1.1rem;margin-bottom:10px}
+  .mapa .alas{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+  .ala-card{border-radius:12px;padding:12px;border:2px solid;background:#190f28;font-size:.9rem}
+  .ala-card b{display:block;font-family:'Consolas','Courier New',monospace;margin-bottom:4px}
+  .a-coo{border-color:var(--ciano)} .a-coo b{color:var(--ciano)}
+  .a-zoo{border-color:var(--lilas)} .a-zoo b{color:var(--lilas)}
+  .a-fic{border-color:var(--laranja)} .a-fic b{color:var(--laranja)}
+  .a-enf{border-color:var(--verde)} .a-enf b{color:var(--verde)}
+  .secao{margin-top:28px}
+  .secao > h2{font-family:'Consolas','Courier New',monospace;font-size:1.22rem;padding:10px 14px;border-radius:12px;border:2px dashed;background:#190f28;margin-bottom:14px}
+  .s-coo > h2{color:var(--ciano);border-color:var(--ciano)}
+  .s-zoo > h2{color:var(--lilas);border-color:var(--lilas)}
+  .s-fic > h2{color:var(--laranja);border-color:var(--laranja)}
+  .s-enf > h2{color:var(--verde);border-color:var(--verde)}
+  .card{background:var(--fundo2);border:1px solid var(--borda);border-radius:14px;padding:16px;margin-bottom:14px;box-shadow:0 3px 12px rgba(0,0,0,.35)}
+  .card h3{font-size:1.06rem;margin-bottom:8px;font-family:'Consolas','Courier New',monospace;color:#fff}
+  .card p{margin-bottom:8px}
+  .card ul{margin:0 0 8px 20px} .card li{margin-bottom:5px}
+  .conta{font-family:'Consolas','Courier New',monospace;background:#120a1d;border:1px solid var(--borda2);border-radius:10px;padding:11px 13px;margin:0 0 10px;font-size:.96rem;color:#d9ffe9;overflow-x:auto}
+  .destaque{font-weight:bold;color:var(--ambar)}
+  .postit{background:#f7e07a;color:#3a2c00;border-radius:4px;padding:12px 14px;margin:10px 0;box-shadow:3px 3px 0 rgba(0,0,0,.35);transform:rotate(-.5deg);font-size:.95rem}
+  .postit b{color:#6b4f00}
+  .peg-alerta{background:#3b1020;border-left:4px solid var(--verm);padding:10px 13px;margin:10px 0;border-radius:0 10px 10px 0;font-size:.95rem}
+  .peg-alerta b{color:#ff9eb0}
+  table.tab{width:100%;border-collapse:collapse;font-size:.92rem;margin:4px 0 10px}
+  table.tab th,table.tab td{border:1px solid var(--borda2);padding:7px 9px;text-align:left}
+  table.tab th{background:#241538;color:var(--laranja);font-family:'Consolas','Courier New',monospace}
+  table.tab td.c{text-align:center;font-family:'Consolas','Courier New',monospace}
+  .plano{background:#0f0918;border:1px solid var(--borda2);border-radius:12px;padding:14px;margin:4px 0 12px;text-align:center}
+  .grade{position:relative;width:260px;height:200px;margin:0 auto;background:
+     repeating-linear-gradient(0deg,rgba(255,255,255,.09) 0 1px,transparent 1px 40px),
+     repeating-linear-gradient(90deg,rgba(255,255,255,.09) 0 1px,transparent 1px 40px);
+     border-radius:6px}
+  .eixo-x{position:absolute;left:0;right:0;bottom:40px;height:3px;background:var(--ciano)}
+  .eixo-y{position:absolute;top:0;bottom:0;left:40px;width:3px;background:var(--lilas)}
+  .pto{position:absolute;width:12px;height:12px;border-radius:50%;background:var(--verde);box-shadow:0 0 8px var(--verde);transform:translate(-50%,50%)}
+  .rot{position:absolute;font-family:'Consolas','Courier New',monospace;font-size:.72rem}
+  .legplano{font-size:.85rem;color:var(--cinza);margin-top:10px}
+  .flipgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(205px,1fr));gap:12px}
+  .flip{perspective:900px;height:150px;cursor:pointer}
+  .flip-in{position:relative;width:100%;height:100%;transition:transform .55s;transform-style:preserve-3d}
+  .flip.virado .flip-in{transform:rotateY(180deg)}
+  .flip-f,.flip-v{position:absolute;inset:0;backface-visibility:hidden;border-radius:12px;padding:12px;display:flex;align-items:center;justify-content:center;text-align:center;border:2px solid var(--borda2)}
+  .flip-f{background:linear-gradient(140deg,#2a1540,#3a1e55);font-weight:bold;font-family:'Consolas','Courier New',monospace;color:var(--ambar);font-size:1rem}
+  .flip-v{background:#0e2a1c;border-color:#2f6b4a;transform:rotateY(180deg);font-size:.88rem;color:#d7ffe8}
+  .dica-flip{text-align:center;color:var(--cinza);font-size:.85rem;margin-bottom:10px}
+  .glos{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px}
+  .glos div{background:#190f28;border:1px solid var(--borda);border-radius:10px;padding:10px;font-size:.9rem}
+  .glos b{color:var(--ciano)}
+  .fim{background:linear-gradient(120deg,#0e2a1c,#133a2a);border:2px solid var(--verde);border-radius:16px;padding:18px;margin-top:22px;text-align:center}
+  .fim h3{color:#9df5c4;margin-bottom:8px}
+  .fim button{background:var(--verde);color:#06240f;border:none;border-radius:10px;padding:11px 20px;font-weight:bold;font-size:1rem}
+  .fim button:disabled{background:#2c2141;color:#8a7aa8;cursor:not-allowed}
+  .fim a.btn{display:inline-block;margin-top:10px;background:var(--laranja);color:#2b1403;text-decoration:none;font-weight:bold;padding:11px 20px;border-radius:10px}
+  .fim a.btn.off{background:#2c2141;color:#8a7aa8;pointer-events:none}
+  .rodape{text-align:center;color:var(--cinza);font-size:.85rem;margin-top:24px}
+  .modal-bg{display:none;position:fixed;inset:0;background:rgba(6,3,12,.92);z-index:99;align-items:center;justify-content:center;padding:20px}
+  .modal-bg.show{display:flex}
+  .modal{background:var(--fundo2);border:2px solid var(--borda2);border-radius:14px;padding:22px;max-width:430px;text-align:center}
+  .modal .big{font-size:2.6rem;margin-bottom:8px}
+  .modal p{margin-bottom:12px}
+  .modal a{display:inline-block;background:var(--verde);color:#06240f;text-decoration:none;font-weight:bold;padding:10px 18px;border-radius:9px}
+  .modal button{background:var(--verde);color:#06240f;border:none;border-radius:8px;padding:9px 18px;font-weight:bold}
+  @media(max-width:600px){ body{font-size:16.5px} header h1{font-size:1.2rem} .grade{width:220px} }
+</style>
+</head>
+<body>
+<header>
+  <div class="selo">Fliperama do Enigma · Matemática 6º ano · CCF</div>
+  <h1>🗺️ Resumo — Manual do Fliperama</h1>
+  <p>Tudo o que cai na prova, numa página só · Caps. 18 a 21 · Callis Matemática 6 – Livro 2</p>
+</header>
+<div class="pixel"></div>
+<div class="wrap">
+  <nav class="barra-nav" id="nav">
+    <a href="leitura-estendida.html">📖 Leitura Estendida</a>
+    <a class="on" href="resumo.html">🗺️ Resumo</a>
+    <a href="simulado.html" data-etapa="simulado">📝 Simulado</a>
+    <a href="index.html">🏠 Início</a>
+  </nav>
+
+  <div class="painel">
+    <span id="salvo">📏 Role até o fim para liberar o botão de conclusão.</span>
+    <div class="btns">
+      <button class="mini" onclick="exportar()">📥 Exportar</button>
+      <button class="mini" onclick="document.getElementById('imp').click()">📤 Importar</button>
+      <input type="file" id="imp" accept="application/json" style="display:none" onchange="importar(event)">
+      <button class="mini" onclick="pedirZerar()">🗑️ Zerar tudo</button>
+    </div>
+  </div>
+
+  <div class="mapa">
+    <h2>🕹️ Mapa do Fliperama</h2>
+    <div class="alas">
+      <div class="ala-card a-coo"><b>🎯 Zona das Coordenadas</b>Cap. 18 — plano cartesiano, abscissa e ordenada, par ordenado, pontos nos eixos e translação.</div>
+      <div class="ala-card a-zoo"><b>🔍 Zona do Zoom</b>Cap. 19 — ampliar e reduzir na malha, figuras semelhantes e razão de semelhança.</div>
+      <div class="ala-card a-fic"><b>🪙 Zona das Fichas</b>Cap. 20 — porcentagem, cálculo de porcentagens, juros simples e a fórmula J = c · i · t.</div>
+      <div class="ala-card a-enf"><b>🔐 Zona do Enigma</b>Cap. 21 — sentença × equação, operação inversa e problemas com equação.</div>
+    </div>
+  </div>
+
+  <!-- ============ ALA 1 ============ -->
+  <div class="secao s-coo">
+    <h2>🎯 Ala 1 · Zona das Coordenadas (Cap. 18, pp. 64-69)</h2>
+
+    <div class="card">
+      <h3>📍 Localizar é sempre dar DUAS informações</h3>
+      <p>Na batalha naval, a <span class="destaque">letra é a coluna</span> e o <span class="destaque">número é a linha</span>: (A, 4). No cinema, <b>M7</b> = fileira M, poltrona 7. No planeta, usamos:</p>
+      <ul>
+        <li><b>Latitude</b> — divisões de <b>norte a sul</b>, referência: <b>Linha do Equador</b>.</li>
+        <li><b>Longitude</b> — divisões de <b>leste a oeste</b>, referência: <b>meridiano de Greenwich</b>.</li>
+      </ul>
+      <div class="conta">Ponto A: latitude 60° norte · longitude 40° leste<br>Ponto D: latitude 20° sul &nbsp;· longitude 140° leste</div>
+    </div>
+
+    <div class="card">
+      <h3>🖥️ O plano cartesiano por dentro</h3>
+      <div class="plano">
+        <div class="grade">
+          <div class="eixo-x"></div><div class="eixo-y"></div>
+          <div class="pto" style="left:120px;bottom:120px"></div>
+          <div class="rot" style="left:128px;bottom:126px;color:#4ef08a">P (2, 3)</div>
+          <div class="rot" style="left:8px;bottom:14px;color:#ffcc4d">(0,0)</div>
+          <div class="rot" style="right:4px;bottom:20px;color:#49dcff">abscissas →</div>
+          <div class="rot" style="left:46px;top:2px;color:#c08cff">↑ ordenadas</div>
+        </div>
+        <div class="legplano">O ponto P está a <b>2 unidades</b> do eixo das ordenadas e a <b>3 unidades</b> do eixo das abscissas.</div>
+      </div>
+      <ul>
+        <li>Dois <b>eixos perpendiculares</b> (cruzam em ângulo reto).</li>
+        <li><b>Eixo das abscissas</b> = horizontal (deitado). <b>Eixo das ordenadas</b> = vertical (em pé).</li>
+        <li><b>Origem</b> = onde os eixos se cruzam = <b>(0, 0)</b>.</li>
+        <li>Nome em homenagem a <b>René Descartes</b> (1596-1650), do livro <i>Discurso do método</i>.</li>
+      </ul>
+      <div class="postit"><b>Decoreba que salva:</b> <b>A</b>bscissa = <b>A</b>ndar para o lado (vem primeiro). <b>O</b>rdenada = sub<b>i</b>r (vem depois). Par ordenado = <b>(anda, sobe)</b>.</div>
+    </div>
+
+    <div class="card">
+      <h3>🎰 Par ordenado — a ordem é lei</h3>
+      <div class="conta">( abscissa , ordenada ) &nbsp;→&nbsp; (5, 6) <b>≠</b> (6, 5)</div>
+      <p>Pontos diferentes correspondem a pares ordenados diferentes. Trocar a ordem marca outro lugar no plano.</p>
+      <table class="tab">
+        <thead><tr><th>Se o ponto está…</th><th>Então…</th><th>Exemplo</th></tr></thead>
+        <tbody>
+          <tr><td>sobre o eixo das abscissas</td><td>a <b>ordenada é 0</b></td><td class="c">L (6, 0)</td></tr>
+          <tr><td>sobre o eixo das ordenadas</td><td>a <b>abscissa é 0</b></td><td class="c">K (0, 3)</td></tr>
+          <tr><td>na origem</td><td>os <b>dois são 0</b></td><td class="c">(0, 0)</td></tr>
+          <tr><td>num segmento <b>horizontal</b></td><td>todos têm a <b>mesma ordenada</b></td><td class="c">(1,4) (5,4) (9,4)</td></tr>
+          <tr><td>num segmento <b>vertical</b></td><td>todos têm a <b>mesma abscissa</b></td><td class="c">(3,1) (3,6) (3,9)</td></tr>
+        </tbody>
+      </table>
+      <div class="peg-alerta"><b>Pegadinha:</b> a prova dá dois pares com os mesmos números em ordem trocada e pergunta se é o mesmo ponto. <b>Não é.</b></div>
+    </div>
+
+    <div class="card">
+      <h3>➡️ Translação</h3>
+      <p>É a transformação geométrica em que o objeto <b>se desloca de posição sem alterar a forma</b>. As figuras ficam <span class="destaque">congruentes</span> — mesma forma e mesmo tamanho —, só em posição diferente.</p>
+      <div class="peg-alerta"><b>Não confunda:</b> na translação a figura <b>não gira</b>, <b>não aumenta</b> e <b>não diminui</b>. Se mudou de tamanho, aí é ampliação ou redução (Ala 2).</div>
+    </div>
+  </div>
+
+  <!-- ============ ALA 2 ============ -->
+  <div class="secao s-zoo">
+    <h2>🔍 Ala 2 · Zona do Zoom (Cap. 19, pp. 86-89)</h2>
+
+    <div class="card">
+      <h3>📐 Ampliar e reduzir na malha quadriculada</h3>
+      <ul>
+        <li><b>Planta</b> — desenho com todas as particularidades de uma construção, projetado numa superfície horizontal.</li>
+        <li><b>Maquete</b> — reprodução em relevo e em escala reduzida; um modelo.</li>
+        <li><b>Croqui</b> — esboço feito à mão.</li>
+      </ul>
+      <p>Exemplo do livro: a foto de <b>3 cm × 4 cm</b> virou painel de <b>9 cm × 12 cm</b>. Quadradinhos de <b>1 cm</b> na foto e de <b>3 cm</b> no painel: <b>mesma quantidade</b> de quadradinhos, quadradinhos <b>3 vezes maiores</b> — ampliação <b>sem distorção</b>.</p>
+    </div>
+
+    <div class="card">
+      <h3>👯 Figuras semelhantes (símbolo ~)</h3>
+      <div class="conta">São semelhantes quando as DUAS coisas acontecem:<br>1) ângulos correspondentes <b>congruentes</b><br>2) lados correspondentes <b>proporcionais</b></div>
+      <table class="tab">
+        <thead><tr><th>&nbsp;</th><th>Muda?</th></tr></thead>
+        <tbody>
+          <tr><td>Forma da figura</td><td>❌ não muda</td></tr>
+          <tr><td>Ângulos</td><td>❌ não mudam</td></tr>
+          <tr><td>Medida dos lados</td><td>✅ muda (toda na mesma proporção)</td></tr>
+        </tbody>
+      </table>
+      <div class="peg-alerta"><b>Semelhante ≠ igual:</b> mesma forma e mesmo tamanho = <b>congruentes</b>. Mesma forma e tamanhos diferentes = <b>semelhantes</b>. Esticar <b>só um lado</b> não gera figura semelhante.</div>
+    </div>
+
+    <div class="card">
+      <h3>📏 Razão de semelhança — o coração do capítulo</h3>
+      <div class="conta">razão de semelhança = medida de um lado ÷ medida do lado correspondente</div>
+      <p>Ela mostra <b>quantas vezes</b> a figura foi ampliada ou reduzida. Razão <b>2</b> = cada lado dobrou. Razão <b>1/2</b> = cada lado caiu pela metade.</p>
+      <table class="tab">
+        <thead><tr><th>O que a questão dá</th><th>O que fazer</th><th>Exemplo do livro</th></tr></thead>
+        <tbody>
+          <tr><td>razão + lado <b>menor</b></td><td><b>multiplicar</b></td><td class="c">4 · 7 = 28 cm</td></tr>
+          <tr><td>razão + lado <b>maior</b></td><td><b>dividir</b></td><td class="c">100 ÷ 5 = 20 mm</td></tr>
+          <tr><td>os dois lados</td><td><b>dividir</b> um pelo outro</td><td class="c">32 ÷ 8 = razão 4</td></tr>
+        </tbody>
+      </table>
+      <div class="postit"><b>Dica de prova:</b> a razão de semelhança é um <b>número sem unidade</b>. Nunca escreva “razão de 4 cm” — escreva só <b>razão 4</b>.</div>
+      <div class="peg-alerta"><b>Pegadinha dos quadradinhos:</b> na ampliação de razão <b>2</b> do livro, a figura I tinha <b>4</b> quadradinhos e a II, <b>16</b>. A razão dos <b>lados</b> não é a mesma da razão da <b>quantidade de quadradinhos</b>.</div>
+    </div>
+  </div>
+
+  <!-- ============ ALA 3 ============ -->
+  <div class="secao s-fic">
+    <h2>🪙 Ala 3 · Zona das Fichas (Cap. 20, pp. 100-110)</h2>
+
+    <div class="card">
+      <h3>💯 Porcentagem = fração de denominador 100</h3>
+      <p>Porcentagem é um <b>índice de comparação</b> que relaciona qualquer valor à quantidade centesimal. Por isso se lê “por cento”: <b>a cada 100</b>.</p>
+      <table class="tab">
+        <thead><tr><th>Porcentagem</th><th>Fração</th><th>Decimal</th></tr></thead>
+        <tbody>
+          <tr><td class="c">1%</td><td class="c">1/100</td><td class="c">0,01</td></tr>
+          <tr><td class="c">5%</td><td class="c">5/100</td><td class="c">0,05</td></tr>
+          <tr><td class="c">10%</td><td class="c">10/100</td><td class="c">0,1</td></tr>
+          <tr><td class="c">16%</td><td class="c">16/100</td><td class="c">0,16</td></tr>
+          <tr><td class="c">25%</td><td class="c">25/100 = 1/4</td><td class="c">0,25</td></tr>
+          <tr><td class="c">50%</td><td class="c">50/100 = 1/2</td><td class="c">0,5</td></tr>
+          <tr><td class="c">85%</td><td class="c">85/100</td><td class="c">0,85</td></tr>
+          <tr><td class="c">100%</td><td class="c">100/100</td><td class="c">1</td></tr>
+        </tbody>
+      </table>
+      <div class="peg-alerta"><b>Cuidado com a vírgula:</b> 7% = <b>0,07</b>. Já <b>0,7 é 70%</b>. Porcentagem sempre tem <b>duas casas</b> depois da vírgula na forma decimal.</div>
+      <div class="postit"><b>Por que comparar em %:</b> 6 premiados em 25 = <b>24%</b> · 5 em 20 = <b>25%</b>. Quem teve <b>menos</b> premiados foi melhor! Sem transformar em porcentagem, a comparação engana.</div>
+    </div>
+
+    <div class="card">
+      <h3>🏷️ Três caminhos para calcular porcentagem</h3>
+      <div class="conta"><b>1) Fração:</b> 45% de 40 = (45 · 40) ÷ 100 = 1800 ÷ 100 = <b>18</b><br><b>2) Decimal:</b> 5% de 5 500 = 0,05 · 5 500 = <b>275</b><br><b>3) Mental:</b> 10% de 2000 = 200 · 5% = 100 → 15% = 200 + 100 = <b>300</b></div>
+      <div class="postit"><b>Atalhos de ouro:</b> <b>10%</b> → anda com a vírgula <b>uma casa</b> para a esquerda. <b>5%</b> → metade de 10%. <b>20%</b> → dobro de 10%. <b>50%</b> → metade do número. <b>1%</b> → vírgula <b>duas casas</b>.</div>
+      <div class="peg-alerta"><b>Leia o enunciado:</b> se 55% são meninas, os meninos são <b>100% − 55% = 45%</b>. E se a questão pede o preço <b>com desconto</b>, calcule o desconto e <b>depois subtraia</b> do preço.</div>
+    </div>
+
+    <div class="card">
+      <h3>🏦 Juros simples — o vocabulário que cai na prova</h3>
+      <table class="tab">
+        <thead><tr><th>Palavra</th><th>O que é</th></tr></thead>
+        <tbody>
+          <tr><td><b>Capital (c)</b></td><td>o dinheiro do começo: o que foi emprestado ou aplicado</td></tr>
+          <tr><td><b>Juro (J)</b></td><td>o valor a mais, cobrado ou recebido por causa do tempo</td></tr>
+          <tr><td><b>Taxa (i)</b></td><td>a porcentagem combinada, sempre com um tempo junto (2% <b>ao mês</b>)</td></tr>
+          <tr><td><b>Tempo (t)</b></td><td>quanto tempo o dinheiro ficou emprestado ou aplicado</td></tr>
+          <tr><td><b>Montante (M)</b></td><td>o valor final = <b>capital + juros</b></td></tr>
+        </tbody>
+      </table>
+      <p>No exemplo da televisão: à vista R$ 1.250,00 e a prazo R$ 1.400,00. A diferença de <b>R$ 150,00</b> são os juros, que correspondem a <b>12%</b> do preço à vista; dividindo por 8 parcelas, a taxa é de <b>1,5% ao mês</b>.</p>
+      <div class="conta"><b>Nos juros simples a conta é SEMPRE sobre o capital inicial.</b><br>2% de 5 000 = 100 por mês → em 5 meses: 5 · 100 = <b>500</b><br>montante = 5 000 + 500 = <b>R$ 5.500,00</b></div>
+    </div>
+
+    <div class="card">
+      <h3>🧮 A fórmula J = c · i · t</h3>
+      <div class="conta"><b>J = c · i · t</b> &nbsp;&nbsp;e&nbsp;&nbsp; <b>M = c + J</b><br><br>Exemplo resolvido do livro:<br>c = 8 000 · i = 2% = 0,02 · t = 5 meses<br>J = 8 000 · 0,02 · 5 = <b>R$ 800,00</b><br>M = 8 000 + 800 = <b>R$ 8.800,00</b></div>
+      <div class="postit"><b>Regra de ouro:</b> taxa e tempo na <b>mesma unidade</b>. Taxa ao mês → tempo em meses. Taxa ao ano → tempo em anos. Se a taxa é <b>36% ao ano</b> e o tempo está em meses, primeiro faça 36% ÷ 12 = <b>3% ao mês</b>.</div>
+      <div class="peg-alerta"><b>Montante ou juro?</b> “Quanto vai <b>pagar</b> / quanto vai <b>receber</b>” quase sempre é o <b>montante</b> (capital + juros). “Quanto de <b>juros</b>” é só o J.</div>
+    </div>
+  </div>
+
+  <!-- ============ ALA 4 ============ -->
+  <div class="secao s-enf">
+    <h2>🔐 Ala 4 · Zona do Enigma (Cap. 21, pp. 120-125)</h2>
+
+    <div class="card">
+      <h3>🟰 Sentença matemática × equação</h3>
+      <table class="tab">
+        <thead><tr><th>&nbsp;</th><th>Tem igualdade?</th><th>Tem valor desconhecido?</th><th>Exemplo</th></tr></thead>
+        <tbody>
+          <tr><td><b>Sentença matemática</b></td><td class="c">✅</td><td class="c">❌</td><td class="c">12 + 8 = 20</td></tr>
+          <tr><td><b>Equação</b></td><td class="c">✅</td><td class="c">✅</td><td class="c">☐ + 3 = 5 &nbsp;/&nbsp; 2x = 10</td></tr>
+        </tbody>
+      </table>
+      <p><span class="destaque">Equação</span> = igualdade matemática com <b>pelo menos um valor desconhecido</b>, representado por um quadradinho ou por uma letra.</p>
+      <div class="peg-alerta"><b>Pegadinha certeira:</b> a prova mostra <b>12 + 8 = 20</b> e pergunta se é equação. <b>Não é</b> — falta o valor desconhecido.</div>
+    </div>
+
+    <div class="card">
+      <h3>🔑 A chave: operação inversa</h3>
+      <table class="tab">
+        <thead><tr><th>Se a equação tem…</th><th>Use…</th><th>Exemplo do livro</th></tr></thead>
+        <tbody>
+          <tr><td>adição (k + 12 = 36)</td><td>subtração</td><td class="c">36 − 12 → k = 24</td></tr>
+          <tr><td>subtração (K − 5 = 2)</td><td>adição</td><td class="c">5 + 2 → K = 7</td></tr>
+          <tr><td>multiplicação (3 · T = 12)</td><td>divisão</td><td class="c">12 ÷ 3 → T = 4</td></tr>
+          <tr><td>divisão (n ÷ 8 = 7)</td><td>multiplicação</td><td class="c">8 · 7 → n = 56</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3>🏆 Problema → equação, em 4 passos</h3>
+      <div class="conta"><b>1.</b> dê uma letra ao valor desconhecido<br><b>2.</b> monte a igualdade com o que o problema conta<br><b>3.</b> use a operação inversa<br><b>4.</b> <b>confira substituindo</b> a resposta na equação</div>
+      <p><b>Exemplo 1 —</b> 3 sanduíches, nota de R$ 50,00, troco de R$ 27,50:</p>
+      <div class="conta">3S + 27,50 = 50,00 → 50,00 − 27,50 = 22,50 → 3S = 22,50 → <b>S = R$ 7,50</b><br>conferindo: 3 · 7,50 + 27,50 = 22,50 + 27,50 = 50,00 ✔</div>
+      <p><b>Exemplo 2 —</b> 80 pessoas, 2 ônibus, sobraram 4 lugares:</p>
+      <div class="conta">2x − 4 = 80 → 80 + 4 = 84 → 2x = 84 → <b>x = 42 lugares</b></div>
+    </div>
+
+    <div class="card">
+      <h3>✍️ Linguagem algébrica — escrever direito</h3>
+      <table class="tab">
+        <thead><tr><th>Em português</th><th>Em matemática</th></tr></thead>
+        <tbody>
+          <tr><td>3 vezes o número S</td><td class="c">3 · S = 3S</td></tr>
+          <tr><td>o dobro de um número</td><td class="c">2x</td></tr>
+          <tr><td>a metade de um número</td><td class="c">x ÷ 2</td></tr>
+          <tr><td>três consecutivos, o do meio é x</td><td class="c">x − 1, x, x + 1</td></tr>
+          <tr><td>um número par</td><td class="c">2n</td></tr>
+          <tr><td>um número ímpar</td><td class="c">2n + 1</td></tr>
+          <tr><td>área do quadrado de lado x</td><td class="c">x²</td></tr>
+          <tr><td>perímetro do quadrado de lado x</td><td class="c">4x</td></tr>
+          <tr><td>polegadas → centímetros</td><td class="c">C = 2,54 · P</td></tr>
+        </tbody>
+      </table>
+      <div class="postit"><b>Exemplo da TV:</b> 32 polegadas → 32 · 2,54 = <b>81,28 cm</b>. A fórmula é uma equação que serve para qualquer tamanho de tela.</div>
+    </div>
+  </div>
+
+  <!-- ============ FLIP CARDS ============ -->
+  <div class="secao s-coo">
+    <h2>🃏 Cartas do Fliperama — toque para virar</h2>
+    <div class="dica-flip">Tente responder de cabeça antes de virar cada carta.</div>
+    <div class="flipgrid" id="flips"></div>
+  </div>
+
+  <!-- ============ GLOSSÁRIO ============ -->
+  <div class="secao s-fic">
+    <h2>📔 Glossário rápido</h2>
+    <div class="glos">
+      <div><b>Abscissa</b> — o primeiro número do par ordenado; distância medida no eixo horizontal.</div>
+      <div><b>Ordenada</b> — o segundo número do par ordenado; distância medida no eixo vertical.</div>
+      <div><b>Origem</b> — ponto (0, 0), onde os dois eixos se cruzam.</div>
+      <div><b>Par ordenado</b> — a dupla (abscissa, ordenada) que localiza um ponto.</div>
+      <div><b>Perpendiculares</b> — retas que se cruzam formando ângulo reto.</div>
+      <div><b>Translação</b> — deslocamento da figura sem mudar a forma nem o tamanho.</div>
+      <div><b>Congruentes</b> — figuras com a mesma forma E o mesmo tamanho.</div>
+      <div><b>Semelhantes (~)</b> — mesma forma, tamanhos diferentes: ângulos congruentes e lados proporcionais.</div>
+      <div><b>Razão de semelhança</b> — número sem unidade que diz quantas vezes a figura foi ampliada ou reduzida.</div>
+      <div><b>Planta / maquete / croqui</b> — desenho na horizontal / modelo em relevo reduzido / esboço à mão.</div>
+      <div><b>Porcentagem</b> — fração de denominador 100 (e os decimais equivalentes).</div>
+      <div><b>Capital</b> — valor inicial emprestado ou aplicado.</div>
+      <div><b>Juro</b> — valor a mais pago ou recebido pelo tempo.</div>
+      <div><b>Montante</b> — capital + juros; o valor final.</div>
+      <div><b>Taxa</b> — a porcentagem dos juros, sempre ligada a um tempo (ao mês, ao ano).</div>
+      <div><b>Sentença matemática</b> — igualdade com todos os valores conhecidos.</div>
+      <div><b>Equação</b> — igualdade com pelo menos um valor desconhecido.</div>
+      <div><b>Operação inversa</b> — a que desfaz a outra: + e −, · e ÷.</div>
+    </div>
+  </div>
+
+  <div class="fim" id="fim">
+    <h3 id="fim-h3">🔒 Próxima etapa: Simulado</h3>
+    <p id="fim-txt">Role até aqui e confirme a leitura para destravar o Simulado.</p>
+    <button id="btn-li" onclick="confirmarLeitura()" disabled>✅ Li o resumo até o fim</button><br>
+    <a class="btn off" id="btn-prox" href="simulado.html">📝 Pronto para o Simulado!</a>
+  </div>
+
+  <div class="rodape">Feito com carinho para o jovem aprendiz. 🕹️ Boa prova!</div>
+</div>
+
+<div class="modal-bg" id="lock">
+  <div class="modal">
+    <div class="big">🔒</div>
+    <p><b>Esta etapa ainda está trancada.</b></p>
+    <p id="lock-txt">Para abrir o Resumo, conclua a Leitura Estendida.</p>
+    <a href="index.html">Voltar ao início</a>
+  </div>
+</div>
+<div class="modal-bg" id="modal">
+  <div class="modal">
+    <p id="modal-txt"></p>
+    <button onclick="fecharModal()" id="modal-ok">Ok</button>
+    <button class="mini" onclick="fecharModal()" id="modal-cancel" style="display:none;margin-left:8px">Cancelar</button>
+  </div>
+</div>
+
+<script>
+/* ====== TRILHA COM CADEADOS ====== */
+var KIT='fliperama_enigma_mat6';
+var TRILHA=[
+ {id:'leitura', chave:KIT+'_leitura_v1', nome:'Leitura Estendida', arquivo:'leitura-estendida.html', emoji:'📖'},
+ {id:'resumo', chave:KIT+'_resumo_v1', nome:'Resumo', arquivo:'resumo.html', emoji:'🗺️'},
+ {id:'simulado', chave:KIT+'_simulado_v1', nome:'Simulado', arquivo:'simulado.html', emoji:'📝'}
+];
+function lerJSON(k){ try{ var s=localStorage.getItem(k); return s?JSON.parse(s):null; }catch(e){ return null; } }
+function trilhaLiberada(){ var t=lerJSON(KIT+'_trilha_v1'); return !!(t&&t.liberadoPelosPais); }
+function etapaConcluida(id){ var e=TRILHA.filter(function(t){return t.id===id;})[0]; var d=lerJSON(e.chave); return !!(d&&d.concluido); }
+function podeAbrir(id){ var idx=TRILHA.map(function(t){return t.id;}).indexOf(id); if(idx<=0||trilhaLiberada()) return true; return etapaConcluida(TRILHA[idx-1].id); }
+function marcarNav(){
+  var links=document.querySelectorAll('#nav a[data-etapa]');
+  for(var i=0;i<links.length;i++){ var id=links[i].getAttribute('data-etapa'); if(!podeAbrir(id)){ links[i].classList.add('lock'); links[i].textContent='🔒 '+links[i].textContent.replace('🔒 ',''); links[i].setAttribute('title','Ainda trancado'); } else { links[i].classList.remove('lock'); links[i].textContent=links[i].textContent.replace('🔒 ',''); links[i].removeAttribute('title'); } }
+}
+function checarTrava(){
+  if(podeAbrir('resumo')) return true;
+  var L=lerJSON(KIT+'_leitura_v1'); var p=(L&&L.progresso)||{conferidos:0,total:13,chkPendentes:0};
+  var faltam=p.total-p.conferidos;
+  var txt= faltam>0 ? 'Para abrir o Resumo, conclua a Leitura Estendida: faltam '+faltam+' de '+p.total+' máquinas.' : 'Para abrir o Resumo, responda a autoavaliação Sim/Não da Leitura Estendida ('+p.chkPendentes+' ponto(s) pendente(s)).';
+  document.getElementById('lock-txt').textContent=txt;
+  document.getElementById('lock').classList.add('show');
+  document.querySelector('.wrap').style.filter='blur(8px)';
+  document.querySelector('.wrap').setAttribute('aria-hidden','true');
+  return false;
+}
+
+/* ====== CARTAS (flip cards) ====== */
+var CARTAS=[
+ {f:'Abscissa é qual eixo?',v:'O eixo HORIZONTAL (deitado). É o primeiro número do par ordenado.'},
+ {f:'Ordenada é qual eixo?',v:'O eixo VERTICAL (em pé). É o segundo número do par ordenado.'},
+ {f:'Coordenadas da origem',v:'(0, 0) — onde os dois eixos se cruzam.'},
+ {f:'(5, 6) e (6, 5) são o mesmo ponto?',v:'NÃO. A ordem faz parte da informação: são pontos diferentes.'},
+ {f:'Ponto sobre o eixo das abscissas',v:'Tem ordenada 0. Ex.: (6, 0).'},
+ {f:'O que é translação?',v:'Deslocar a figura sem mudar a forma nem o tamanho. As figuras ficam congruentes.'},
+ {f:'Quando duas figuras são semelhantes?',v:'Quando têm ângulos correspondentes congruentes E lados correspondentes proporcionais.'},
+ {f:'Razão de semelhança: como se acha?',v:'Dividindo as medidas de dois lados correspondentes. É um número sem unidade.'},
+ {f:'Razão 3 e lado menor 5 cm. E o maior?',v:'3 · 5 = 15 cm. Com o lado menor, multiplica.'},
+ {f:'Razão 4 e lado maior 36 cm. E o menor?',v:'36 ÷ 4 = 9 cm. Com o lado maior, divide.'},
+ {f:'Porcentagem é o quê, na real?',v:'Uma fração de denominador 100 (e o decimal equivalente). 7% = 7/100 = 0,07.'},
+ {f:'Atalho para 10% de um número',v:'Andar com a vírgula uma casa para a esquerda. 10% de 350 = 35.'},
+ {f:'Montante é…',v:'Capital + juros. O valor final, não só o juro.'},
+ {f:'Fórmula dos juros simples',v:'J = c · i · t — juro = capital · taxa · tempo. E M = c + J.'},
+ {f:'Taxa de 36% ao ano, tempo em meses. E agora?',v:'Transformar: 36% ÷ 12 = 3% ao mês. Taxa e tempo na mesma unidade.'},
+ {f:'12 + 8 = 20 é uma equação?',v:'NÃO. É só uma sentença matemática — não tem valor desconhecido.'},
+ {f:'O que é uma equação?',v:'Igualdade matemática com pelo menos um valor desconhecido (quadradinho ou letra).'},
+ {f:'Como se escreve um número ímpar?',v:'2n + 1 (ele vem logo depois do par, que é 2n).'},
+ {f:'Área e perímetro do quadrado de lado x',v:'Área = x² · Perímetro = 4x.'},
+ {f:'Qual é o último passo ao resolver uma equação?',v:'Conferir: substituir o valor encontrado e ver se a igualdade fecha.'}
+];
+function montarCartas(){
+  var g=document.getElementById('flips'), h='';
+  CARTAS.forEach(function(c,i){
+    h+='<div class="flip" onclick="this.classList.toggle(\'virado\')"><div class="flip-in">'
+     +'<div class="flip-f">'+c.f+'</div><div class="flip-v">'+c.v+'</div></div></div>';
+  });
+  g.innerHTML=h;
+}
+
+/* ====== ESTADO DO RESUMO ====== */
+var CHAVE=KIT+'_resumo_v1'; var mem={}; var estado=carregar();
+function carregar(){ try{ var s=localStorage.getItem(CHAVE); if(s) return JSON.parse(s);}catch(e){ if(mem[CHAVE]) return JSON.parse(mem[CHAVE]); } return {rolagemMax:0}; }
+function salvar(){ var s=JSON.stringify(estado); try{ localStorage.setItem(CHAVE,s);}catch(e){ mem[CHAVE]=s; } var d=new Date(); document.getElementById('salvo').textContent='📏 Rolagem máxima: '+Math.round(estado.rolagemMax||0)+'% · 💾 salvo às '+d.toLocaleTimeString('pt-BR')+' de '+d.toLocaleDateString('pt-BR'); }
+function medirRolagem(){
+  var h=document.documentElement; var total=h.scrollHeight-h.clientHeight; var pct= total<=0?100:Math.min(100,(window.scrollY||h.scrollTop)/total*100);
+  if(pct>(estado.rolagemMax||0)){ estado.rolagemMax=pct; salvar(); }
+  var b=document.getElementById('btn-li'); if(!estado.concluido && (estado.rolagemMax||0)>=90){ b.disabled=false; }
+}
+function confirmarLeitura(){ if(estado.concluido) return; if((estado.rolagemMax||0)<90) return; estado.concluido=true; estado.concluidoEm=new Date().toISOString(); salvar(); atualizarFim(); }
+function atualizarFim(){
+  var h3=document.getElementById('fim-h3'), txt=document.getElementById('fim-txt'), b=document.getElementById('btn-li'), a=document.getElementById('btn-prox');
+  if(estado.concluido||trilhaLiberada()){ h3.textContent='✅ Resumo lido — Simulado destravado!'; txt.textContent=estado.concluido?'Agora encare o Simulado valendo, como se fosse a prova.':'Trilha liberada pelos pais.'; b.disabled=!!estado.concluido||(estado.rolagemMax||0)<90; b.textContent=estado.concluido?'✅ Resumo concluído':'✅ Li o resumo até o fim'; a.classList.remove('off'); }
+  else { h3.textContent='🔒 Próxima etapa: Simulado'; txt.textContent=(estado.rolagemMax||0)>=90?'Confirme a leitura para destravar o Simulado.':'Role até o fim da página para habilitar o botão (rolagem: '+Math.round(estado.rolagemMax||0)+'%).'; a.classList.add('off'); }
+  marcarNav();
+}
+function exportar(){ var blob=new Blob([JSON.stringify(estado,null,2)],{type:'application/json'}); var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='resumo_fliperama-do-enigma.json'; a.click(); }
+function importar(ev){ var f=ev.target.files[0]; if(!f) return; var r=new FileReader(); r.onload=function(){ try{ estado=JSON.parse(r.result); salvar(); atualizarFim(); mostrarModal('✅ Progresso importado!',false);}catch(e){ mostrarModal('❌ Arquivo inválido.',false);} }; r.readAsText(f); }
+var acaoZerar=null;
+function pedirZerar(){ acaoZerar=true; mostrarModal('Zerar a rolagem deste Resumo? (Se ele já foi concluído, a conclusão é mantida e o Simulado continua aberto.)',true); }
+function mostrarModal(txt,confirmar){ document.getElementById('modal-txt').innerHTML=txt; document.getElementById('modal').classList.add('show'); document.getElementById('modal-cancel').style.display=confirmar?'inline-block':'none'; document.getElementById('modal-ok').textContent=confirmar?'Sim, zerar':'Ok';
+  document.getElementById('modal-ok').onclick=function(){ if(confirmar&&acaoZerar){ var c=estado.concluido, ce=estado.concluidoEm; estado={rolagemMax:0}; if(c){estado.concluido=true; estado.concluidoEm=ce;} salvar(); atualizarFim(); } acaoZerar=null; fecharModal(); }; }
+function fecharModal(){ document.getElementById('modal').classList.remove('show'); }
+
+montarCartas();
+if(checarTrava()){ salvar(); atualizarFim(); window.addEventListener('scroll',function(){ medirRolagem(); atualizarFim(); }); setTimeout(function(){ medirRolagem(); atualizarFim(); },300); } else { marcarNav(); }
+</script>
+</body>
+</html>

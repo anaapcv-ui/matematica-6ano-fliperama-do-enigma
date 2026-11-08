@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leitura Estendida · Fliperama do Enigma · Matemática 6º</title>
+<style>
+  :root{
+    --fundo:#140b1f; --fundo2:#1f1230; --borda:#3b2456; --borda2:#5a3880;
+    --verde:#4ef08a; --laranja:#ff9e3d; --ciano:#49dcff; --lilas:#c08cff;
+    --verm:#ff4d6d; --vermelho:#ff4d6d; --ambar:#ffcc4d;
+    --texto:#f3eefc; --cinza:#b8a6d4; --postit:#ffe066;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',system-ui,Arial,sans-serif;font-size:17px;background:
+    radial-gradient(900px 420px at 50% -8%,rgba(192,140,255,.20),transparent 70%),
+    repeating-linear-gradient(0deg,rgba(255,255,255,.015) 0 2px,transparent 2px 4px),var(--fundo);
+    color:var(--texto);line-height:1.65;padding-bottom:60px}
+  .pixel{height:14px;background:
+    repeating-linear-gradient(90deg,#4ef08a 0 14px,transparent 14px 28px) 0 0/112px 7px repeat-x,
+    repeating-linear-gradient(90deg,#ff9e3d 0 14px,transparent 14px 28px) 28px 7px/112px 7px repeat-x,
+    repeating-linear-gradient(90deg,#49dcff 0 14px,transparent 14px 28px) 56px 0/112px 7px repeat-x;
+    opacity:.85}
+  header{background:linear-gradient(120deg,#2a1140,#3a1659 50%,#160c24);padding:24px 18px;text-align:center;box-shadow:0 4px 18px rgba(0,0,0,.55);border-bottom:4px solid var(--verde)}
+  header .selo{font-family:'Consolas','Courier New',monospace;font-size:.78rem;letter-spacing:4px;color:#9df5c4;text-transform:uppercase}
+  header h1{font-family:'Consolas','Courier New',monospace;font-size:1.5rem;margin:8px 0 4px;text-shadow:0 0 12px rgba(78,240,138,.45)}
+  header p{color:#e4d9f5;font-size:.92rem}
+  .wrap{max-width:820px;margin:0 auto;padding:16px}
+  .barra-nav{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:16px 0}
+  .barra-nav a{background:var(--fundo2);color:var(--texto);text-decoration:none;padding:7px 12px;border-radius:20px;font-size:.85rem;border:1px solid var(--borda)}
+  .barra-nav a.on{background:var(--verde);color:#06240f;font-weight:bold}
+  .barra-nav a.lock{opacity:.5}
+  .intro{background:var(--fundo2);border:1px solid var(--borda);border-radius:14px;padding:16px;margin-bottom:16px}
+  .intro h2{color:var(--laranja);font-size:1.12rem;margin-bottom:8px;font-family:'Consolas','Courier New',monospace}
+  .intro ol{margin:8px 0 0 20px}
+  .legenda{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;font-size:.8rem}
+  .legenda span{padding:3px 10px;border-radius:12px;font-weight:bold}
+  .lg-coo{background:#0d2b3b;color:var(--ciano)} .lg-zoo{background:#271a42;color:var(--lilas)}
+  .lg-fic{background:#3a2410;color:#ffc383} .lg-enf{background:#0e3022;color:#8ff5bb}
+  .painel{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;background:var(--fundo2);border:1px solid var(--borda);border-radius:12px;padding:10px 14px;margin-bottom:16px;font-size:.85rem}
+  .painel .btns{display:flex;gap:6px;flex-wrap:wrap}
+  button{cursor:pointer;font-family:inherit}
+  .mini{background:var(--fundo);color:var(--texto);border:1px solid var(--borda2);border-radius:8px;padding:6px 10px;font-size:.8rem}
+  .mini:hover{background:#2b1b42}
+  .parte{margin:26px 0 12px;padding:10px 14px;border-radius:12px;font-weight:bold;font-size:.95rem;letter-spacing:.5px;border:2px dashed var(--borda2);background:#190f28;font-family:'Consolas','Courier New',monospace}
+  .parte.coo{color:var(--ciano);border-color:var(--ciano)} .parte.zoo{color:var(--lilas);border-color:var(--lilas)}
+  .parte.fic{color:var(--laranja);border-color:var(--laranja)} .parte.enf{color:var(--verde);border-color:var(--verde)}
+  .bloco{background:var(--fundo2);border:1px solid var(--borda);border-radius:16px;margin-bottom:18px;overflow:hidden;box-shadow:0 3px 12px rgba(0,0,0,.4)}
+  .bloco.travado{opacity:.55}
+  .bloco-cab{display:flex;align-items:center;gap:12px;padding:14px 16px;background:linear-gradient(90deg,#241538,#301d4a);border-bottom:1px dashed var(--borda2)}
+  .bloco-cab .num{color:#140b1f;font-weight:bold;width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Consolas','Courier New',monospace;box-shadow:0 0 0 3px #140b1f,0 0 0 5px currentColor;background:var(--laranja)}
+  .bloco.coo .num{background:var(--ciano)} .bloco.zoo .num{background:var(--lilas)}
+  .bloco.fic .num{background:var(--laranja)} .bloco.enf .num{background:var(--verde)}
+  .bloco-cab h3{font-size:1.08rem;color:#fff;font-family:'Consolas','Courier New',monospace}
+  .bloco-cab .porto{font-family:'Consolas','Courier New',monospace;font-size:.72rem;color:var(--cinza);letter-spacing:2px;text-transform:uppercase}
+  .bloco-corpo{padding:16px}
+  .texto p{margin-bottom:10px}
+  .texto ul{margin:0 0 10px 20px}
+  .texto li{margin-bottom:5px}
+  .texto .destaque{font-weight:bold}
+  .bloco.coo .texto .destaque{color:#9fe9ff} .bloco.zoo .texto .destaque{color:var(--lilas)}
+  .bloco.fic .texto .destaque{color:#ffc383} .bloco.enf .texto .destaque{color:#8ff5bb}
+  .conta{font-family:'Consolas','Courier New',monospace;background:#120a1d;border:1px solid var(--borda2);border-radius:10px;padding:10px 12px;margin:0 0 10px;font-size:.95rem;color:#d9ffe9;overflow-x:auto}
+  .olhar{background:#2d1f42;border-left:3px solid var(--postit);padding:8px 12px;margin:0 0 10px;border-radius:0 8px 8px 0;font-size:.93rem}
+  .olhar b{color:var(--postit)}
+  .cadeado{padding:22px 16px;text-align:center;color:var(--cinza);font-size:.9rem}
+  .perg{background:#171028;border:1px solid var(--borda);border-radius:12px;padding:12px;margin-top:12px}
+  .perg.red{border-color:var(--verm);box-shadow:0 0 0 1px var(--verm) inset}
+  .perg label{display:block;font-weight:bold;margin:6px 0 8px;font-size:.98rem}
+  .perg .tag{font-size:.68rem;letter-spacing:1px;text-transform:uppercase;padding:2px 8px;border-radius:10px;font-weight:bold}
+  .perg .tag.conc{background:#0d2b3b;color:var(--ciano)}
+  .perg .tag.apl{background:#0e3022;color:var(--verde)}
+  textarea{width:100%;min-height:74px;background:#0f0918;color:var(--texto);border:1px solid var(--borda2);border-radius:8px;padding:9px;font-family:inherit;font-size:.95rem;resize:vertical}
+  .aviso{display:none;margin-top:8px;padding:8px 10px;border-radius:8px;font-size:.88rem}
+  .aviso.amarelo{display:block;background:#3a2c0c;border:1px solid var(--postit);color:#ffe9a3}
+  .aviso.vermelho{display:block;background:#3b1020;border:1px solid var(--verm);color:#ffc2cd}
+  .modelo{display:none;margin-top:10px;background:#0e2a1c;border:1px solid #2f6b4a;border-radius:10px;padding:10px}
+  .modelo.show{display:block}
+  .modelo .lab{font-size:.72rem;letter-spacing:1px;text-transform:uppercase;color:#8ff5bb;font-weight:bold}
+  .modelo p{margin-top:5px;font-size:.95rem}
+  .chk{margin-top:10px;border-top:1px dashed #2f6b4a;padding-top:8px}
+  .chk .item{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:7px;font-size:.9rem}
+  .chk .simnao{display:flex;gap:5px;flex-shrink:0}
+  .chk button{border:1px solid var(--borda2);background:#17102a;color:var(--texto);border-radius:7px;padding:3px 11px;font-size:.8rem}
+  .chk button.sim.ativo{background:var(--verde);color:#06240f;border-color:var(--verde);font-weight:bold}
+  .chk button.nao.ativo{background:var(--verm);color:#2b0710;border-color:var(--verm);font-weight:bold}
+  .conferir{width:100%;margin-top:14px;background:var(--verde);color:#06240f;border:none;border-radius:10px;padding:12px;font-weight:bold;font-size:1rem}
+  .conferir:disabled{background:#2c2141;color:#7d6c9c;cursor:not-allowed}
+  .status-bloco{margin-top:10px;font-size:.9rem;text-align:center}
+  .prox{margin-top:10px;text-align:center}
+  .prox a{color:var(--ciano);text-decoration:none;font-weight:bold;font-size:.9rem}
+  .peg,.cobertura,.revisar,.relatorio{background:var(--fundo2);border:1px solid var(--borda);border-radius:14px;padding:16px;margin-top:20px}
+  .peg h3{color:var(--postit);margin-bottom:10px;font-family:'Consolas','Courier New',monospace}
+  .peg ol{margin-left:20px} .peg li{margin-bottom:8px;font-size:.95rem}
+  .cobertura h3{color:var(--ciano);margin-bottom:10px;font-family:'Consolas','Courier New',monospace}
+  .cobertura table{width:100%;border-collapse:collapse;font-size:.85rem}
+  .cobertura th,.cobertura td{border:1px solid var(--borda);padding:6px 8px;text-align:left;vertical-align:top}
+  .cobertura th{background:#241538;color:var(--laranja)}
+  .revisar h3{color:#ffc2cd;margin-bottom:8px} .revisar ul{margin-left:20px;font-size:.92rem}
+  .relatorio h3{color:var(--laranja);margin-bottom:8px;font-family:'Consolas','Courier New',monospace}
+  .trilha-fim{background:linear-gradient(120deg,#0e2a1c,#133a2a);border:2px solid var(--verde);border-radius:16px;padding:18px;margin-top:18px;text-align:center}
+  .trilha-fim h3{color:#9df5c4;margin-bottom:8px}
+  .trilha-fim a.btn{display:inline-block;margin-top:8px;background:var(--verde);color:#06240f;text-decoration:none;font-weight:bold;padding:11px 20px;border-radius:10px}
+  .trilha-fim a.btn.off{background:#2c2141;color:#8a7aa8;pointer-events:none}
+  .rodape{text-align:center;color:var(--cinza);font-size:.85rem;margin-top:24px}
+  .modal-bg{display:none;position:fixed;inset:0;background:rgba(6,3,12,.8);z-index:99;align-items:center;justify-content:center;padding:20px}
+  .modal-bg.show{display:flex}
+  .modal{background:var(--fundo2);border:2px solid var(--borda2);border-radius:14px;padding:20px;max-width:420px;text-align:center}
+  .modal p{margin-bottom:14px}
+  .modal button{background:var(--verde);color:#06240f;border:none;border-radius:8px;padding:9px 18px;font-weight:bold}
+  @media(max-width:600px){ body{font-size:16px} header h1{font-size:1.2rem} .cobertura table{font-size:.78rem} }
+</style>
+</head>
+<body>
+<header>
+  <div class="selo">Fliperama do Enigma · Matemática 6º ano · CCF</div>
+  <h1>📖 Leitura Estendida — As 13 Máquinas</h1>
+  <p>Plano cartesiano · semelhança e razão · porcentagem e juros simples · equações</p>
+</header>
+<div class="pixel"></div>
+<div class="wrap">
+  <nav class="barra-nav" id="nav">
+    <a class="on" href="leitura-estendida.html">📖 Leitura Estendida</a>
+    <a href="resumo.html" data-etapa="resumo">🗺️ Resumo</a>
+    <a href="simulado.html" data-etapa="simulado">📝 Simulado</a>
+    <a href="index.html">🏠 Início</a>
+  </nav>
+
+  <div class="intro">
+    <h2>🕹️ Bem-vindo(a) ao Fliperama do Enigma, jovem aprendiz!</h2>
+    <p>O fliperama abriu só para você. Cada bloco de estudo é uma <b>máquina</b>, e as máquinas estão separadas em quatro alas. A próxima máquina só liga quando você termina a anterior:</p>
+    <ol>
+      <li>Leia a máquina com calma. Tudo aqui vem do seu livro <b>Callis Matemática 6 – Livro 2</b>, das páginas que caem na prova.</li>
+      <li>Responda as 3 perguntas <b>escrevendo</b> com as suas palavras (não vale copiar o texto).</li>
+      <li>Clique em <b>Conferir</b>: aparecem a resposta-modelo e uma autoavaliação Sim/Não.</li>
+      <li>Com as 13 máquinas conferidas e a autoavaliação respondida, o <b>🗺️ Resumo destrava</b>.</li>
+    </ol>
+    <div class="legenda"><span class="lg-coo">🎯 1–4 · Zona das Coordenadas</span><span class="lg-zoo">🔍 5–7 · Zona do Zoom</span><span class="lg-fic">🪙 8–11 · Zona das Fichas</span><span class="lg-enf">🔐 12–13 · Zona do Enigma</span></div>
+  </div>
+
+  <div class="painel">
+    <span id="salvo">💾 Progresso salvo automaticamente.</span>
+    <div class="btns">
+      <button class="mini" onclick="exportar()">📥 Exportar</button>
+      <button class="mini" onclick="document.getElementById('imp').click()">📤 Importar</button>
+      <input type="file" id="imp" accept="application/json" style="display:none" onchange="importar(event)">
+      <button class="mini" onclick="pedirZerar()">🗑️ Zerar tudo</button>
+    </div>
+  </div>
+
+  <div id="blocos"></div>
+
+  <div class="peg">
+    <h3>⚠️ 10 Pegadinhas da Prova (não caia nelas!)</h3>
+    <ol>
+      <li><b>A ordem do par ordenado muda o ponto:</b> (5, 6) e (6, 5) são <b>pontos diferentes</b>. A combinação é sempre <b>(abscissa, ordenada)</b> — primeiro o eixo deitado, depois o eixo em pé.</li>
+      <li><b>Abscissa × ordenada:</b> abscissa é o eixo <b>horizontal</b>; ordenada é o eixo <b>vertical</b>. Quem está sobre o eixo das abscissas tem <b>ordenada 0</b>; quem está sobre o eixo das ordenadas tem <b>abscissa 0</b>. A origem é <b>(0, 0)</b>.</li>
+      <li><b>Reta deitada × reta em pé:</b> num segmento <b>horizontal</b> todos os pontos têm a <b>mesma ordenada</b>; num segmento <b>vertical</b>, a <b>mesma abscissa</b>.</li>
+      <li><b>Translação só desloca.</b> A figura não gira, não aumenta e não diminui — ela continua <b>congruente</b>, só muda de lugar.</li>
+      <li><b>Semelhante não é igual:</b> figuras semelhantes têm <b>ângulos correspondentes congruentes</b> <u>e</u> <b>lados correspondentes proporcionais</b>. Esticar só um lado <b>não</b> gera figura semelhante.</li>
+      <li><b>A razão de semelhança é um número sem unidade</b> (não é cm nem mm). Razão <b>2</b> = cada lado dobrou; razão <b>1/2</b> = cada lado caiu pela metade.</li>
+      <li><b>Dobrar o lado não dobra os quadradinhos:</b> no exemplo do livro a razão dos <b>lados</b> era 2, mas a quantidade de quadradinhos foi de <b>4 para 16</b>.</li>
+      <li><b>Vírgula no lugar certo:</b> 7% = 7/100 = <b>0,07</b>. Já <b>0,7 é 70%</b>, não 7%. E 1% = 0,01.</li>
+      <li><b>Mais não é melhor:</b> 6 premiados em 25 dá <b>24%</b>, e 5 em 20 dá <b>25%</b> — a turma com menos premiados foi melhor. Só dá para comparar transformando em porcentagem.</li>
+      <li><b>Juros simples:</b> a taxa é sempre calculada sobre o <b>capital inicial</b>, então todo mês rende o mesmo valor. <b>Montante = capital + juros</b> (não é só o juro!), e em <b>J = c · i · t</b> a taxa e o tempo têm de estar na <b>mesma unidade</b> (2% ao mês → tempo em meses).</li>
+    </ol>
+  </div>
+
+  <div class="cobertura">
+    <h3>🧭 Cobertura: Tópico → Máquina</h3>
+    <table>
+      <thead><tr><th>Tópico que cai na prova</th><th>Onde está no livro (Livro 2)</th><th>Máquina</th></tr></thead>
+      <tbody>
+        <tr><td>Localização e coordenadas: batalha naval (coluna e linha), poltrona de cinema, latitude e longitude</td><td>Cap. 18 · pp. 64-65</td><td>1</td></tr>
+        <tr><td>Plano cartesiano: eixos perpendiculares, abscissas, ordenadas, origem, Descartes</td><td>Cap. 18 · p. 66</td><td>2</td></tr>
+        <tr><td>Par ordenado: a ordem altera a localização; (abscissa, ordenada)</td><td>Cap. 18 · p. 67</td><td>3</td></tr>
+        <tr><td>Pontos sobre os eixos, origem (0,0), segmentos horizontais e verticais, translação</td><td>Cap. 18 · pp. 68-69</td><td>4</td></tr>
+        <tr><td>Ampliações e reduções: planta, maquete, croqui, outdoor, malha quadriculada</td><td>Cap. 19 · pp. 80-82</td><td>5</td></tr>
+        <tr><td>Semelhança de figuras: ângulos congruentes e lados proporcionais, símbolo ~</td><td>Cap. 19 · p. 83</td><td>6</td></tr>
+        <tr><td>Razão de semelhança: definição, razão 2 e 1/2, exercícios resolvidos, quadradinhos</td><td>Cap. 19 · pp. 86-89</td><td>7</td></tr>
+        <tr><td>Porcentagem: fração de denominador 100, as três representações, comparar turmas</td><td>Cap. 20 · pp. 100-101</td><td>8</td></tr>
+        <tr><td>Cálculo de porcentagens: forma fracionária, forma decimal, esquema e cálculo mental</td><td>Cap. 20 · pp. 102-105</td><td>9</td></tr>
+        <tr><td>Juros simples: à vista × a prazo, capital, juro, taxa, montante</td><td>Cap. 20 · pp. 106-108</td><td>10</td></tr>
+        <tr><td>Fórmula dos juros simples J = c · i · t e M = c + J</td><td>Cap. 20 · pp. 109-110</td><td>11</td></tr>
+        <tr><td>Sentença matemática × equação; valor desconhecido; operação inversa</td><td>Cap. 21 · pp. 120-122</td><td>12</td></tr>
+        <tr><td>Equações e problemas; linguagem algébrica (2n, 2n+1, consecutivos, x² e 4x); polegadas → cm</td><td>Cap. 21 · pp. 123-125</td><td>13</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="revisar" id="revisar" style="display:none">
+    <h3>🔁 Para revisar antes da prova</h3>
+    <ul id="revisar-lista"></ul>
+  </div>
+
+  <div class="relatorio">
+    <h3>📊 Resumo para os pais (desta leitura)</h3>
+    <div id="rel-conteudo">Assim que o aprendiz for conferindo as máquinas, o resumo aparece aqui.</div>
+  </div>
+
+  <div class="trilha-fim" id="trilha-fim">
+    <h3>🔒 Próxima etapa: Resumo</h3>
+    <p id="trilha-fim-txt">O Resumo destrava quando as 13 máquinas estiverem conferidas e a autoavaliação respondida.</p>
+    <a class="btn off" id="btn-prox" href="resumo.html">🗺️ Ir para o Resumo</a>
+  </div>
+
+  <div class="rodape">Feito com carinho para o jovem aprendiz. 🕹️ Boa leitura — e boa prova!</div>
+</div>
+
+<div class="modal-bg" id="modal">
+  <div class="modal">
+    <p id="modal-txt"></p>
+    <button onclick="fecharModal()" id="modal-ok">Ok</button>
+    <button class="mini" onclick="fecharModal()" id="modal-cancel" style="display:none;margin-left:8px">Cancelar</button>
+  </div>
+</div>
+
+<script>
+/* ====== TRILHA COM CADEADOS (módulo comum do kit) ====== */
+var KIT='fliperama_enigma_mat6';
+var TRILHA=[
+ {id:'leitura', chave:KIT+'_leitura_v1', nome:'Leitura Estendida', arquivo:'leitura-estendida.html', emoji:'📖'},
+ {id:'resumo', chave:KIT+'_resumo_v1', nome:'Resumo', arquivo:'resumo.html', emoji:'🗺️'},
+ {id:'simulado', chave:KIT+'_simulado_v1', nome:'Simulado', arquivo:'simulado.html', emoji:'📝'}
+];
+function lerJSON(k){ try{ var s=localStorage.getItem(k); return s?JSON.parse(s):null; }catch(e){ return null; } }
+function trilhaLiberada(){ var t=lerJSON(KIT+'_trilha_v1'); return !!(t&&t.liberadoPelosPais); }
+function etapaConcluida(id){ var e=TRILHA.filter(function(t){return t.id===id;})[0]; var d=lerJSON(e.chave); return !!(d&&d.concluido); }
+function podeAbrir(id){ var idx=TRILHA.map(function(t){return t.id;}).indexOf(id); if(idx<=0||trilhaLiberada()) return true; return etapaConcluida(TRILHA[idx-1].id); }
+function marcarNav(){
+  var links=document.querySelectorAll('#nav a[data-etapa]');
+  for(var i=0;i<links.length;i++){ var id=links[i].getAttribute('data-etapa'); if(!podeAbrir(id)){ links[i].classList.add('lock'); links[i].textContent='🔒 '+links[i].textContent.replace('🔒 ',''); links[i].setAttribute('title','Ainda trancado'); } else { links[i].classList.remove('lock'); links[i].textContent=links[i].textContent.replace('🔒 ',''); links[i].removeAttribute('title'); } }
+}
+
+/* ====== MÁQUINAS (conteúdo do Callis Matemática 6 – Livro 2, lido no P+) ====== */
+var BLOCOS = [
+ {
+  "porto": "Máquina 01 · Localização e coordenadas · pp. 64-65",
+  "emoji": "🚢",
+  "u": "coo",
+  "titulo": "Batalha Naval",
+  "parte": "Ala 1 · Zona das Coordenadas — achar um ponto sem errar (Cap. 18)",
+  "texto": [
+   "A primeira máquina do fliperama é a mais antiga de todas: a <span class='destaque'>batalha naval</span>, criada por soldados russos na Primeira Guerra Mundial. Dois adversários desenhavam navios num mar quadriculado e iam atacando casa por casa. Ganhava quem descobrisse primeiro onde estavam as embarcações do outro.",
+   "Para dizer <b>exatamente</b> onde atacar, ninguém diz “ali em cima, mais ou menos no meio”. Usam-se <span class='destaque'>coordenadas</span>: a <b>letra mostra a coluna</b> e o <b>número mostra a linha</b>. Por isso as jogadas aparecem assim: (A, 4), (C, 9), (E, 6).",
+   "O livro traz um exercício resolvido: para derrubar uma embarcação é preciso acertar <b>todas</b> as casas que ela ocupa. Se a jogada (F, 9) atingiu um navio, as casas que faltam estão todas na <b>linha 9</b>:",
+   "<div class='conta'>(G, 9) &nbsp;·&nbsp; (H, 9) &nbsp;·&nbsp; (I, 9)</div>",
+   "A mesma ideia aparece fora do jogo. No <b>cinema</b>, o bilhete marcado <b>M7</b> quer dizer: procure a <b>fileira M</b> e sente na <b>poltrona 7</b>. E no <b>planeta inteiro</b> funciona igual: a <span class='destaque'>latitude</span> são as divisões de <b>norte a sul</b>, usando a <b>Linha do Equador</b> como referência, e a <span class='destaque'>longitude</span> são as divisões de <b>leste a oeste</b>, usando o <b>meridiano de Greenwich</b>. Assim dá para dizer, sem dúvida nenhuma: “Ponto A: latitude 60° norte e longitude 40° leste”.",
+   "<div class='olhar'><b>O segredo da máquina:</b> uma coordenada sempre tem <b>duas informações</b>. Uma sozinha não localiza nada — dizer só “linha 9” é apontar para o mar inteiro.</div>"
+  ],
+  "perguntas": [
+   {
+    "tag": "conc",
+    "q": "Explique, com as suas palavras, por que uma coordenada precisa sempre de duas informações para localizar alguma coisa.",
+    "modelo": "Porque uma informação sozinha mostra só uma faixa inteira. A letra (ou a coluna) diz o caminho de um lado para o outro, e o número (ou a linha) diz o caminho de cima para baixo. Só as duas juntas marcam um ponto único.",
+    "chk": [
+     "Disse que uma informação sozinha não é suficiente?",
+     "Disse o que cada uma das duas informações indica (coluna e linha)?"
+    ]
+   },
+   {
+    "tag": "apl",
+    "q": "O bilhete do seu amigo está marcado “H3” e o seu, “C8”. Explique, para alguém que nunca foi ao cinema, como cada um acha o seu lugar.",
+    "modelo": "A letra é a fileira e o número é a poltrona. Meu amigo procura a fileira H e senta na poltrona 3. Eu procuro a fileira C e sento na poltrona 8. São lugares diferentes, em fileiras diferentes.",
+    "chk": [
+     "Explicou que a letra indica a fileira?",
+     "Explicou que o número indica a poltrona?"
+    ]
+   },
+   {
+    "tag": "apl",
+    "q": "Invente um ponto qualquer no globo e escreva a latitude e a longitude dele, do jeito que o livro faz. Depois diga qual linha serve de referência para cada uma.",
+    "modelo": "Por exemplo: latitude 30° sul e longitude 50° oeste. A latitude usa a Linha do Equador como referência e vai de norte a sul. A longitude usa o meridiano de Greenwich e vai de leste a oeste.",
+    "chk": [
+     "Escreveu a latitude dizendo norte ou sul?",
+     "Escreveu a longitude dizendo leste ou oeste?",
+     "Citou a Linha do Equador para a latitude e o meridiano de Greenwich para a longitude?"
+    ]
+   }
+  ]
+ },
+ {
+  "porto": "Máquina 02 · Plano cartesiano · p. 66",
+  "emoji": "🖥️",
+  "u": "coo",
+  "titulo": "A Tela Cartesiana",
+  "texto": [
+   "Na Matemática, o tabuleiro oficial para localizar pontos se chama <span class='destaque'>plano cartesiano</span>. Ele é formado por <b>dois eixos perpendiculares</b>, ou seja, dois eixos que se cruzam formando ângulo reto.",
+   "Cada eixo tem nome próprio: o <b>eixo horizontal</b> (o deitado) é o <span class='destaque'>eixo das abscissas</span>; o <b>eixo vertical</b> (o em pé) é o <span class='destaque'>eixo das ordenadas</span>. O ponto em que os dois se cruzam é a <span class='destaque'>origem</span> do plano cartesiano.",
+   "O nome vem de <b>René Descartes</b> (1596-1650), matemático e filósofo francês. No livro <i>Discurso do método</i> ele criou uma forma de localizar pontos e figuras usando um sistema de linhas — e esse sistema acabou ganhando o nome de plano <i>cartesiano</i>, em homenagem a ele.",
+   "Para localizar um ponto, olhamos a distância dele até cada eixo. No exemplo do livro, o ponto P está a <b>2 unidades do eixo das ordenadas</b> e a <b>5 unidades do eixo das abscissas</b>. Então a localização dele é:",
+   "<div class='conta'>P = (2, 5) &nbsp;&nbsp;→&nbsp;&nbsp; 2 é a <b>abscissa</b> de P &nbsp;·&nbsp; 5 é a <b>ordenada</b> de P</div>",
+   "<div class='olhar'><b>Jeito fácil de não esquecer:</b> <b>abscissa</b> começa com “a”, como “andar para o lado” — é o eixo deitado e vem <b>primeiro</b>. <b>Ordenada</b> lembra “ordem de subir” — é o eixo em pé e vem <b>depois</b>.</div>"
+  ],
+  "perguntas": [
+   {
+    "tag": "conc",
+    "q": "Explique o que são os dois eixos do plano cartesiano, qual é o nome de cada um e onde fica a origem.",
+    "modelo": "São duas retas perpendiculares (que se cruzam em ângulo reto). O eixo horizontal, deitado, é o eixo das abscissas; o eixo vertical, em pé, é o eixo das ordenadas. A origem é o ponto onde os dois se cruzam.",
+    "chk": [
+     "Disse que o eixo horizontal é o das abscissas?",
+     "Disse que o eixo vertical é o das ordenadas?",
+     "Disse que a origem é o cruzamento dos dois eixos?"
+    ]
+   },
+   {
+    "tag": "apl",
+    "q": "Um colega afirmou: “a ordenada é o eixo deitado”. Ele está certo? Explique onde está o erro dele com as suas palavras.",
+    "modelo": "Ele está errado. O eixo deitado (horizontal) é o das abscissas. A ordenada é o eixo em pé (vertical). Ele trocou os dois nomes.",
+    "chk": [
+     "Disse que o colega está errado?",
+     "Disse qual é o eixo correto de cada nome?"
+    ]
+   },
+   {
+    "tag": "apl",
+    "q": "Um ponto está a 4 unidades do eixo das ordenadas e a 1 unidade do eixo das abscissas. Escreva as coordenadas desse ponto e diga qual número é a abscissa e qual é a ordenada.",
+    "modelo": "O ponto é (4, 1). O 4 é a abscissa (distância até o eixo das ordenadas, medida na horizontal) e o 1 é a ordenada (distância até o eixo das abscissas, medida na vertical).",
+    "chk": [
+     "Escreveu o par (4, 1) nessa ordem?",
+     "Disse que 4 é a abscissa e 1 é a ordenada?"
+    ]
+   }
+  ]
+ },
+ {
+  "porto": "Máquina 03 · Par ordenado · p. 67",
+  "emoji": "🎰",
+  "u": "coo",
+  "titulo": "O Par Ordenado",
+  "texto": [
+   "Esta máquina só aceita a ficha na <b>ordem certa</b>. Olhando os pontos no plano cartesiano, o livro faz uma pergunta importante: <i>a ordem em que escrevemos os números altera a localização?</i>",
+   "Altera, e muito. Os pontos <b>(5, 6)</b> e <b>(6, 5)</b> são <b>pontos diferentes</b>, em lugares diferentes do plano. Se você trocar a ordem, marca o ponto errado.",
+   "Para ninguém se confundir, os matemáticos combinaram uma ordem única e definitiva:",
+   "<div class='conta'>( abscissa , ordenada ) &nbsp;&nbsp;=&nbsp;&nbsp; ( eixo horizontal , eixo vertical )</div>",
+   "Essa dupla de números recebe o nome de <span class='destaque'>par ordenado</span> — “ordenado” porque a ordem faz parte da informação. E vale a regra: <b>pontos diferentes correspondem a pares ordenados diferentes</b>.",
+   "<div class='olhar'><b>Pegadinha favorita da prova:</b> mostrar dois pares com os mesmos números em ordem trocada e perguntar se é o mesmo ponto. Não é!</div>"
+  ],
+  "perguntas": [
+   {
+    "tag": "conc",
+    "q": "O que é um par ordenado e por que ele recebe justamente o nome de “ordenado”?",
+    "modelo": "É a dupla de números que localiza um ponto no plano cartesiano, escrita como (abscissa, ordenada). Chama-se ordenado porque a ordem dos números faz parte da informação: trocar a ordem muda o ponto.",
+    "chk": [
+     "Disse que é a dupla de números que localiza o ponto?",
+     "Disse que a ordem importa / que trocar a ordem muda o ponto?"
+    ]
+   },
+   {
+    "tag": "apl",
+    "q": "Pense nos pontos (3, 7) e (7, 3). Eles são o mesmo ponto? Explique onde cada um estaria no plano.",
+    "modelo": "Não são o mesmo ponto. Em (3, 7) ando 3 para o lado e subo 7. Em (7, 3) ando 7 para o lado e subo 3. O primeiro fica mais alto e mais à esquerda; o segundo, mais baixo e mais à direita.",
+    "chk": [
+     "Disse que NÃO são o mesmo ponto?",
+     "Explicou a posição de cada um (quanto anda e quanto sobe)?"
+    ]
+   },
+   {
+    "tag": "apl",
+    "q": "Escreva uma dica curta, com as suas palavras, para um colega do 6º ano nunca mais trocar a ordem dos números de um par ordenado.",
+    "modelo": "Uma dica possível: “primeiro ando, depois subo”. O primeiro número manda andar na horizontal (abscissa) e o segundo manda subir na vertical (ordenada). Nunca comece subindo.",
+    "chk": [
+     "A dica deixa claro que o primeiro número é o da horizontal?",
+     "A dica deixa claro que o segundo número é o da vertical?"
+    ]
+   }
+  ]
+ },
+ {
+  "porto": "Máquina 04 · Pontos nos eixos e translação · pp. 68-69",
+  "emoji": "🧭",
+  "u": "coo",
+  "titulo": "Estação Zero-Zero",
+  "texto": [
+   "No centro do fliperama fica a <b>Estação Zero-Zero</b>: a origem do plano cartesiano, o ponto onde o eixo das abscissas e o eixo das ordenadas se cruzam. As coordenadas dela são <span class='destaque'>(0, 0)</span>.",
+   "Dali saem duas regras que caem muito em prova:",
+   "<div class='conta'>Ponto <b>sobre o eixo das abscissas</b> &nbsp;→&nbsp; ordenada = <b>0</b> &nbsp;&nbsp;ex.: L (6, 0)<br>Ponto <b>sobre o eixo das ordenadas</b> &nbsp;→&nbsp; abscissa = <b>0</b> &nbsp;&nbsp;ex.: K (0, 3)</div>",
+   "E quando os pontos formam uma reta? Num <b>segmento horizontal</b> (deitado), todos os pontos têm a <b>mesma ordenada</b> — eles estão todos na mesma altura. Num <b>segmento vertical</b> (em pé), todos têm a <b>mesma abscissa</b> — estão todos na mesma coluna.",
+   "A última função desta máquina é a <span class='destaque'>translação</span>: a transformação geométrica em que um objeto <b>se desloca de posição sem alterar a forma</b>. As figuras continuam <b>congruentes</b> (mesma forma e mesmo tamanho), só estão em um lugar diferente do espaço.",
+   "<div class='olhar'><b>Cuidado:</b> transladar é só “andar”. A figura <b>não gira</b>, <b>não aumenta</b> e <b>não diminui</b>. Se mudou de tamanho, não foi translação.</div>"
+  ],
+  "perguntas": [
+   {
+    "tag": "apl",
+    "q": "O ponto K(0, 3) está sobre qual eixo? E o ponto L(6, 0)? Explique como você descobriu.",
+    "modelo": "K(0, 3) está sobre o eixo das ordenadas, porque a abscissa dele é 0 (não andou nada na horizontal). L(6, 0) está sobre o eixo das abscissas, porque a ordenada é 0 (não subiu nada).",
+    "chk": [
+     "Disse que K está no eixo das ordenadas porque a abscissa é 0?",
+     "Disse que L está no eixo das abscissas porque a ordenada é 0?"
+    ]
+   },
+   {
+    "tag": "apl",
+    "q": "Marque no papel os pontos A(3, 1), B(2, 3), C(3, 5) e D(4, 3) e ligue um ao outro na ordem. Quantos lados tem a figura formada e o que você percebeu sobre o tamanho deles?",
+    "modelo": "A figura tem 4 lados (é um quadrilátero). Medindo, os quatro lados têm o mesmo tamanho — ela fica parecida com um losango “em pé”, com as pontas em cima, embaixo e dos dois lados.",
+    "chk": [
+     "Disse que a figura tem 4 lados (quadrilátero)?",
+     "Percebeu que os lados têm medidas iguais?"
+    ]
+   },
+   {
+    "tag": "conc",
+    "q": "Explique, com as suas palavras, o que é uma translação e o que acontece (e o que NÃO acontece) com a figura.",
+    "modelo": "Translação é quando a figura se desloca para outra posição sem mudar a forma. O que muda é só o lugar; o tamanho, a forma e os ângulos continuam iguais, por isso as figuras são congruentes. Ela não gira, não aumenta e não diminui.",
+    "chk": [
+     "Disse que a figura muda de posição?",
+     "Disse que a forma e o tamanho continuam iguais (congruentes)?"
+    ]
+   }
+  ]
+ },
+ {
+  "porto": "Máquina 05 · Ampliações e reduções · pp. 80-82",
+  "emoji": "🔍",
+  "u": "zoo",
+  "titulo": "A Máquina do Zoom",
+  "parte": "Ala 2 · Zona do Zoom — crescer e encolher sem distorcer (Cap. 19)",
+  "texto": [
+   "Representar alguma coisa <b>maior</b> ou <b>menor</b> do que ela é de verdade aparece o tempo todo. Um arquiteto desenha uma <b>planta</b>, monta uma <b>maquete</b> ou faz um <b>croqui</b> — tudo na mesma proporção da realidade, só que em tamanho menor. Já a foto de uma pessoa num <b>outdoor</b> é aumentada, e precisa crescer proporcionalmente para não ficar distorcida.",
+   "<ul><li><b>Planta:</b> desenho que representa todas as particularidades de uma construção, de um objeto ou de um terreno, projetado numa superfície horizontal.</li><li><b>Maquete:</b> reprodução em relevo e em escala reduzida de uma obra; um modelo.</li><li><b>Croqui:</b> esboço de desenho, pintura ou projeto, feito à mão.</li></ul>",
+   "Hoje essas ampliações e reduções costumam ser feitas no computador, mas dá para fazer na mão com a <span class='destaque'>malha quadriculada</span>. O livro conta o caso de Rafael, que quis reproduzir uma foto da filha de <b>3 cm por 4 cm</b> num painel de <b>9 cm por 12 cm</b>. A ideia dele:",
+   "<div class='conta'>foto → quadriculada com quadradinhos de <b>1 cm</b><br>painel → quadriculado com quadradinhos de <b>3 cm</b><br>mesma <b>quantidade</b> de quadradinhos, quadradinhos <b>3 vezes maiores</b></div>",
+   "Como as duas imagens foram divididas na mesma quantidade de quadradinhos, bastou copiar o que havia em cada quadradinho. O resultado foi uma ampliação <b>sem distorção</b>. Para <b>reduzir</b> é a mesma lógica ao contrário: no exemplo do barco, cada traço foi feito com <b>metade</b> da medida original (2 · PA = PA’, 2 · AB = A’B’).",
+   "<div class='olhar'><b>Nota do narrador:</b> o quadriculado é só uma <b>referência</b>, uma guia para a mão. Quem garante que não há distorção é manter <b>todos</b> os traços na mesma proporção — não adianta aumentar só a largura.</div>"
+  ],
+  "perguntas": [
+   {
+    "tag": "apl",
+    "q": "Por que Rafael usou quadradinhos de 1 cm na foto e de 3 cm no painel? Explique como essa escolha evita que o desenho fique distorcido.",
+    "modelo": "Porque assim as duas imagens ficaram divididas na mesma quantidade de quadradinhos. Cada quadradinho do painel é 3 vezes maior, então tudo o que ele copiava crescia 3 vezes, do mesmo jeito em todas as direções. Como tudo cresce igual, o desenho não entorta.",
+    "chk": [
+     "Disse que as duas imagens ficam com a mesma quantidade de quadradinhos?",
+     "Disse que tudo cresce na mesma proporção (3 vezes), por isso não distorce?"
+    ]
+   },
+   {
+    "tag": "conc",
+    "q": "Explique, com as suas palavras, a diferença entre planta, maquete e croqui.",
+    "modelo": "A planta é um desenho da construção visto de cima, numa superfície horizontal, com todos os detalhes. A maquete é um modelo em relevo, de três dimensões, feito em tamanho reduzido. O croqui é um esboço rápido, feito à mão.",
+    "chk": [
+     "Explicou que a planta é um desenho (visto numa superfície horizontal)?",
+     "Explicou que a maquete é um modelo em relevo e reduzido?",
+     "Explicou que o croqui é um esboço feito à mão?"
+    ]
+   },
+   {
+    "tag": "apl",
+    "q": "Você quer reduzir pela metade, numa malha quadriculada, um desenho que mede 8 cm por 6 cm. Quais vão ser as medidas do desenho reduzido e o que acontece com cada traço?",
+    "modelo": "O desenho reduzido vai ficar com 4 cm por 3 cm, porque 8 : 2 = 4 e 6 : 2 = 3. Cada traço do desenho passa a ter metade da medida original, todos reduzidos do mesmo jeito.",
+    "chk": [
+     "Chegou às medidas 4 cm por 3 cm?",
+     "Disse que cada traço fica com metade da medida?"
+    ]
+   }
+  ]
+ },
+ {
+  "porto": "Máquina 06 · Semelhança de figuras · p. 83",
+  "emoji": "👯",
+  "u": "zoo",
+  "titulo": "O Espelho Gêmeo",
+  "texto": [
+   "Esta máquina mostra a mesma figura em três tamanhos: o <b>pentágono original</b>, a <b>redução</b> e a <b>ampliação</b>. Olhando com atenção, o livro aponta que a redução e a ampliação guardam <b>duas características importantes</b> do original:",
+   "<div class='conta'>1) ângulos correspondentes <b>congruentes</b> (iguais)<br>2) lados correspondentes <b>proporcionais</b></div>",
+   "Quando as duas coisas acontecem ao mesmo tempo, dizemos que as figuras são <span class='destaque'>semelhantes</span>. Para indicar isso usamos o símbolo <b>~</b>. No exemplo do livro:",
+   "<div class='conta'>pentágono original <b>~</b> pentágono reduzido <b>~</b> pentágono ampliado</div>",
+   "Repare no que mudou e no que não mudou. <b>Mudou:</b> a medida dos lados. <b>Não mudou:</b> a forma e os ângulos. É por isso que a figura continua sendo “a mesma”, só que maior ou menor.",
+   "<div class='olhar'><b>Semelhante não é igual!</b> Figuras com a <b>mesma forma e o mesmo tamanho</b> são <b>congruentes</b>. Figuras com a <b>mesma forma e tamanhos diferentes</b> são <b>semelhantes</b>.</div>"
+  ],
+  "perguntas": [
+   {
+    "tag": "conc",
+    "q": "Quais são as duas condições que o livro apresenta para que duas figuras sejam semelhantes?",
+    "modelo": "Os ângulos correspondentes precisam ser congruentes (iguais) e os lados correspondentes precisam ser proporcionais. As duas condições juntas.",
+    "chk": [
+     "Citou os ângulos correspondentes congruentes?",
+     "Citou os lados correspondentes proporcionais?"
+    ]
+   },
+   {
+    "tag": "apl",
+    "q": "Um colega diz: “ampliei o desenho — dobrei a largura e deixei a altura do mesmo jeito”. A figura nova é semelhante à original? Explique.",
+    "modelo": "Não é semelhante. Ele mexeu só em um lado, então os lados não ficaram proporcionais: um dobrou e o outro não. A figura fica esticada e distorcida. Para ser semelhante, todos os lados teriam de dobrar.",
+    "chk": [
+     "Disse que NÃO é semelhante?",
+     "Explicou que os lados não ficaram todos proporcionais?"
+    ]
+   },
+   {
+    "tag": "apl",
+    "q": "Dê um exemplo do seu dia a dia de duas figuras semelhantes e explique por que elas são semelhantes.",
+    "modelo": "Por exemplo, a foto de uma pessoa no celular e a mesma foto impressa num cartaz grande. As duas têm a mesma forma e os mesmos ângulos; só os tamanhos dos lados mudaram, todos na mesma proporção.",
+    "chk": [
+     "Deu um exemplo com duas figuras de tamanhos diferentes?",
+     "Explicou que a forma/os ângulos continuam iguais e os lados são proporcionais?"
+    ]
+   }
+  ]
+ },
+ {
+  "porto": "Máquina 07 · Razão de semelhança · pp. 86-89",
+  "emoji": "📏",
+  "u": "zoo",
+  "titulo": "O Medidor de Razão",
+  "texto": [
+   "Saber que duas figuras são semelhantes é bom. Saber <b>quantas vezes</b> uma é maior que a outra é melhor ainda — e é isso que esta máquina mede. Quando dividimos as medidas de <b>dois lados correspondentes</b> de figuras semelhantes, encontramos a <span class='destaque'>razão de semelhança</span>: o fator pelo qual a imagem foi aumentada ou reduzida.",
+   "<div class='conta'>razão de semelhança = medida de um lado ÷ medida do lado correspondente</div>",
+   "Se a razão for <b>2</b>, cada segmento da figura original foi <b>dobrado</b> para gerar a figura maior. Se a razão for <b>1/2</b>, cada segmento foi <b>reduzido pela metade</b>.",
+   "Veja os exercícios resolvidos do livro. No primeiro, dois triângulos semelhantes têm razão de semelhança <b>4</b>, e o lado conhecido do triângulo menor mede <b>7 cm</b>. Então o lado correspondente do maior é:",
+   "<div class='conta'>DE = 4 · 7 = <b>28 cm</b></div>",
+   "No segundo, a razão de semelhança é <b>5</b> e o lado da figura <b>maior</b> mede <b>100 mm</b>. Agora o caminho é ao contrário — basta pensar: “100 dividido por qual número resulta em 5?”",
+   "<div class='conta'>100 ÷ 5 = <b>20 mm</b> (lado da figura menor)</div>",
+   "O livro ainda deixa um alerta com os quadradinhos da malha: numa ampliação de razão <b>2</b>, a figura I tinha <b>4</b> quadradinhos e a figura II, <b>16</b>. Ou seja, a razão dos <b>lados</b> e a razão da <b>quantidade de quadradinhos</b> não são a mesma coisa.",
+   "<div class='olhar'><b>Post-it de prova:</b> a razão de semelhança é um <b>número sem unidade</b> — não se escreve “razão de 4 cm”, e sim “razão 4”. Ela só diz <b>quantas vezes</b> a figura foi ampliada ou reduzida.</div>"
+  ],
+  "perguntas": [
+   {
+    "tag": "apl",
+    "q": "Dois retângulos são semelhantes e a razão de semelhança é 3. Se um lado do menor mede 5 cm, quanto mede o lado correspondente do maior? Mostre a conta.",
+    "modelo": "Como a razão é 3, o lado do maior é 3 vezes o do menor: 3 · 5 = 15. O lado correspondente mede 15 cm.",
+    "chk": [
+     "Multiplicou 3 por 5?",
+     "Chegou a 15 cm?"
+    ]
+   },
+   {
+    "tag": "apl",
+    "q": "A razão de semelhança entre duas figuras é 4 e o lado da figura MAIOR mede 36 cm. Quanto mede o lado correspondente da figura menor? Explique como você pensou.",
+    "modelo": "Como a razão é 4, o lado maior é 4 vezes o menor. Então penso: “36 dividido por qual número dá 4?”, ou faço 36 : 4 = 9. O lado da figura menor mede 9 cm.",
+    "chk": [
+     "Percebeu que aqui era preciso dividir (e não multiplicar)?",
+     "Chegou a 9 cm?"
+    ]
+   },
+   {
+    "tag": "conc",
+    "q": "Explique, com as suas palavras, o que a razão de semelhança informa e por que ela não tem unidade (não é cm nem mm).",
+    "modelo": "Ela informa quantas vezes a figura foi ampliada ou reduzida. Não tem unidade porque é o resultado da divisão de uma medida por outra medida da mesma unidade — as unidades se cancelam e sobra só o número.",
+    "chk": [
+     "Disse que mostra quantas vezes a figura foi ampliada ou reduzida?",
+     "Explicou que é a divisão de duas medidas, por isso sobra só o número?"
+    ]
+   }
+  ]
+ },
+ {
+  "porto": "Máquina 08 · Porcentagem · pp. 100-101",
+  "emoji": "🪙",
+  "u": "fic",
+  "titulo": "O Caça-Fichas",
+  "parte": "Ala 3 · Zona das Fichas — porcentagem e dinheiro (Cap. 20)",
+  "texto": [
+   "Duas turmas chegaram à final de uma olimpíada de Matemática. Na <b>turma A</b>, foram premiados <b>6 dos 25</b> alunos. Na <b>turma B</b>, <b>5 dos 20</b>. Qual turma foi melhor?",
+   "A resposta rápida seria “a A, que teve mais premiados”. Mas as turmas <b>não têm o mesmo tamanho</b>, então comparar só a quantidade engana. O jeito certo é escrever as duas frações com o <b>mesmo denominador</b> — e o denominador mais prático de todos é o <b>100</b>:",
+   "<div class='conta'>turma A → 6/25 = <b>24/100</b> = <b>24%</b><br>turma B → 5/20 = <b>25/100</b> = <b>25%</b> &nbsp;&nbsp;→&nbsp; a turma <b>B</b> foi melhor!</div>",
+   "É isso que é a <span class='destaque'>porcentagem</span>: um índice de comparação que relaciona qualquer valor à quantidade centesimal. Em outras palavras, porcentagens são <b>frações de denominador 100</b> — e as frações e os decimais equivalentes a elas. Por isso se lê “24 <b>por cento</b>”: 24 a cada 100.",
+   "Como toda fração tem um correspondente decimal, cada valor acaba tendo <b>três representações</b> do mesmo tamanho:",
+   "<div class='conta'>85% &nbsp;=&nbsp; 85/100 &nbsp;=&nbsp; 0,85<br>16% &nbsp;=&nbsp; 16/100 &nbsp;=&nbsp; 0,16<br>&nbsp;&nbsp;1% &nbsp;=&nbsp; &nbsp;1/100 &nbsp;=&nbsp; 0,01</div>",
+   "<div class='olhar'><b>Cuidado com a vírgula:</b> 7% é 0,<b>07</b> (sete centésimos). <b>0,7 é 70%</b>, dez vezes mais! Conte sempre as duas casas depois da vírgula.</div>"
+  ],
+  "perguntas": [
+   {
+    "tag": "conc",
+    "q": "Explique, com as suas palavras, por que não dá para dizer que a turma A foi melhor só porque teve mais alunos premiados.",
+    "modelo": "Porque as turmas têm tamanhos diferentes: a A tem 25 alunos e a B tem 20. Seis premiados numa turma maior pesa menos do que cinco numa turma menor. Para comparar de verdade é preciso pôr as duas na mesma base, que é a porcentagem: 24% contra 25%.",
+    "chk": [
+     "Disse que as turmas têm quantidades diferentes de alunos?",
+     "Disse que é preciso comparar em porcentagem (mesma base / denominador 100)?"
+    ]
+   },
+   {
+    "tag": "apl",
+    "q": "Escreva 40% nas três formas que o livro mostra (porcentagem, fração e número decimal).",
+    "modelo": "40% = 40/100 = 0,40 (ou 0,4). A fração 40/100 também pode ser simplificada para 2/5.",
+    "chk": [
+     "Escreveu a fração com denominador 100 (40/100)?",
+     "Escreveu o decimal 0,4 (ou 0,40)?"
+    ]
+   },
+   {
+    "tag": "apl",
+    "q": "Numa turma de 50 alunos, 10 usam óculos. Transforme isso em porcentagem e explique o caminho que você fez.",
+    "modelo": "Escrevo a fração 10/50. Para chegar ao denominador 100, multiplico o numerador e o denominador por 2: 20/100. Logo, 20% dos alunos usam óculos.",
+    "chk": [
+     "Montou a fração 10/50?",
+     "Transformou para denominador 100 e chegou a 20%?"
+    ]
+   }
+  ]
+ },
+ {
+  "porto": "Máquina 09 · Cálculo de porcentagens · pp. 102-105",
+  "emoji": "🏷️",
+  "u": "fic",
+  "titulo": "O Painel de Descontos",
+  "texto": [
+   "Existem vários caminhos para calcular a porcentagem de um número. O livro mostra três — e todos levam ao mesmo lugar. Escolha o que for mais fácil em cada questão.",
+   "<b>1) Pela forma fracionária.</b> Numa sala com 40 alunos, 55% são meninas. Quantos são meninos? Primeiro, os meninos são o que sobra: 100% − 55% = <b>45%</b>. Então calcular 45% de 40 é o mesmo que calcular 45/100 de 40:",
+   "<div class='conta'>45/100 de 40 &nbsp;=&nbsp; (45 · 40) ÷ 100 &nbsp;=&nbsp; 1800 ÷ 100 &nbsp;=&nbsp; <b>18 meninos</b></div>",
+   "<b>2) Pela forma decimal.</b> A lei garante 5% das vagas de estacionamento para idosos. Numa região com 5 500 vagas, quantas devem ser reservadas? Como 5% = 0,05:",
+   "<div class='conta'>0,05 · 5 500 &nbsp;=&nbsp; <b>275 vagas</b></div>",
+   "<b>3) Por esquema ou cálculo mental.</b> A equipe de basquete fez 60 pontos e o cestinha do time foi responsável por 40% deles. Como 10% de 60 é 6, basta fazer 4 vezes 6 → o cestinha fez <b>24 pontos</b>. O mesmo truque resolve o desconto de 15% do IPVA sobre R$ 2.000,00:",
+   "<div class='conta'>10% de 2000 = 200 &nbsp;&nbsp;·&nbsp;&nbsp; 5% de 2000 = 100<br>15% = 10% + 5% = 200 + 100 = <b>R$ 300,00 de economia</b></div>",
+   "<div class='olhar'><b>Atalhos que salvam na prova:</b> achar <b>10%</b> é só andar com a vírgula <b>uma casa</b> para a esquerda. <b>5%</b> é a <b>metade</b> de 10%. <b>20%</b> é o <b>dobro</b> de 10%. E <b>50%</b> é a metade do número.</div>"
+  ],
+  "perguntas": [
+   {
+    "tag": "apl",
+    "q": "Calcule 20% de 350 e explique, passo a passo, o caminho que você escolheu (fração, decimal ou cálculo mental).",
+    "modelo": "Pelo cálculo mental: 10% de 350 é 35; como 20% é o dobro de 10%, basta fazer 2 · 35 = 70. Pela forma decimal daria o mesmo: 0,20 · 350 = 70. A resposta é 70.",
+    "chk": [
+     "Mostrou o caminho que usou (e não só o resultado)?",
+     "Chegou a 70?"
+    ]
+   },
+   {
+    "tag": "apl",
+    "q": "Uma blusa custa R$ 80,00 e está com 25% de desconto. Quanto você vai pagar por ela? Mostre as contas.",
+    "modelo": "Primeiro calculo o desconto: 25% de 80 = 0,25 · 80 = 20, ou seja, R$ 20,00 de desconto. Depois tiro do preço: 80 − 20 = 60. Vou pagar R$ 60,00.",
+    "chk": [
+     "Calculou o desconto de R$ 20,00?",
+     "Subtraiu do preço e chegou a R$ 60,00?"
+    ]
+   },
+   {
+    "tag": "conc",
+    "q": "Explique por que 0,07 e 7% representam exatamente a mesma coisa.",
+    "modelo": "Porque 7% quer dizer 7 em cada 100, ou seja, a fração 7/100. E 7/100, escrito na forma decimal, é 0,07. São três jeitos de escrever o mesmo valor.",
+    "chk": [
+     "Disse que 7% é a fração 7/100?",
+     "Ligou essa fração ao decimal 0,07?"
+    ]
+   }
+  ]
+ },
+ {
+  "porto": "Máquina 10 · Juros simples · pp. 106-108",
+  "emoji": "🏦",
+  "u": "fic",
+  "titulo": "O Cofre do Banco",
+  "texto": [
+   "Gisele foi comprar uma televisão e viu duas opções no anúncio: <b>à vista por R$ 1.250,00</b> ou <b>a prazo por R$ 1.400,00</b>. Por que o preço a prazo é maior? Porque, ao parcelar, são cobrados <span class='destaque'>juros</span> — a remuneração por pagar depois.",
+   "<div class='conta'>1 400,00 − 1 250,00 = <b>R$ 150,00 de juros</b><br>esses R$ 150,00 são <b>12%</b> do preço à vista<br>12% ÷ 8 parcelas = <b>1,5% ao mês</b> (a taxa de juros ao mês)</div>",
+   "Agora o vocabulário que a prova cobra. Bruno e Patrícia precisam de <b>R$ 5.000,00</b> para comprar móveis e pedem emprestado ao banco:",
+   "<ul><li><span class='destaque'>Capital</span> — o dinheiro emprestado (ou aplicado). Aqui, R$ 5.000,00.</li><li><span class='destaque'>Juro</span> — a quantia que a pessoa paga a mais por ter pegado emprestado (ou que recebe a mais por ter aplicado).</li><li><span class='destaque'>Montante</span> — o valor final: <b>capital + juros</b>.</li><li><span class='destaque'>Taxa</span> — a porcentagem combinada, sempre com um tempo junto: 2% <b>ao mês</b>, 5% <b>ao ano</b>.</li></ul>",
+   "O gerente ofereceu uma taxa de <b>juros simples de 2% ao mês</b>, a ser quitada em <b>5 meses</b>. Nos juros simples, a porcentagem é calculada sempre sobre o <b>capital inicial</b>, então todo mês rende <b>a mesma quantia</b>:",
+   "<div class='conta'>2% de 5 000 = <b>100 por mês</b><br>5 meses → 5 · 100 = <b>R$ 500,00 de juros</b><br>montante = 5 000 + 500 = <b>R$ 5.500,00</b></div>",
+   "<div class='olhar'><b>Alerta de pegadinha:</b> a pergunta “quanto ele vai pagar?” quase sempre pede o <b>montante</b> (capital + juros), e não só o juro. Leia o enunciado duas vezes.</div>"
+  ],
+  "perguntas": [
+   {
+    "tag": "conc",
+    "q": "Explique, com as suas palavras, a diferença entre capital, juro e montante.",
+    "modelo": "Capital é o dinheiro do começo — o que foi emprestado ou aplicado. Juro é o valor a mais, cobrado ou recebido por causa do tempo. Montante é o total no final: o capital somado com os juros.",
+    "chk": [
+     "Disse que capital é o valor inicial?",
+     "Disse que juro é o valor a mais?",
+     "Disse que montante é capital + juros?"
+    ]
+   },
+   {
+    "tag": "apl",
+    "q": "Débora aplicou R$ 420,00 a uma taxa de juros simples de 1% ao mês. Quanto ela ganha de juros por mês e qual é o montante depois de 3 meses? Mostre as contas.",
+    "modelo": "1% de 420 = 0,01 · 420 = 4,20. Ela ganha R$ 4,20 por mês. Em 3 meses: 3 · 4,20 = 12,60 de juros. O montante é 420,00 + 12,60 = R$ 432,60.",
+    "chk": [
+     "Achou R$ 4,20 de juro por mês?",
+     "Chegou ao montante de R$ 432,60?"
+    ]
+   },
+   {
+    "tag": "apl",
+    "q": "Explique para alguém da sua família por que comprar a prazo costuma sair mais caro do que comprar à vista.",
+    "modelo": "Porque quando se paga depois, a loja ou o banco cobra juros pelo tempo de espera. O preço a prazo é o preço à vista mais esses juros. No exemplo da televisão, a diferença foi de R$ 150,00.",
+    "chk": [
+     "Explicou que são cobrados juros pelo parcelamento?",
+     "Disse que o preço a prazo é o preço à vista mais os juros?"
+    ]
+   }
+  ]
+ },
+ {
+  "porto": "Máquina 11 · Fórmula dos juros simples · pp. 109-110",
+  "emoji": "🧮",
+  "u": "fic",
+  "titulo": "A Fórmula J = c · i · t",
+  "texto": [
+   "Montar tabela mês a mês funciona, mas dá trabalho. Olhando a tabela de Bruno e Patrícia, o livro descobre um padrão: para achar o juro, bastou <b>multiplicar o capital pela taxa e pelo tempo</b>.",
+   "<div class='conta'>1 mês: &nbsp;5 000 · 0,02 · 1 = 100<br>2 meses: 5 000 · 0,02 · 2 = 200<br>3 meses: 5 000 · 0,02 · 3 = 300<br>4 meses: 5 000 · 0,02 · 4 = 400<br>5 meses: 5 000 · 0,02 · 5 = <b>500</b></div>",
+   "Daí sai a fórmula dos <span class='destaque'>juros simples</span>, com o significado de cada letra:",
+   "<div class='conta'><b>J = c · i · t</b><br>J = juro &nbsp;·&nbsp; c = capital &nbsp;·&nbsp; i = taxa em porcentagem &nbsp;·&nbsp; t = tempo<br><br>e o montante: &nbsp;<b>M = c + J</b></div>",
+   "Veja o exercício resolvido do livro. Maria fez um empréstimo de <b>R$ 8.000,00</b> para pagar ao final de <b>5 meses</b>, com taxa de juros simples de <b>2% ao mês</b>. Primeiro identificamos cada informação: c = 8 000, t = 5, i = 2% = 0,02. Depois substituímos:",
+   "<div class='conta'>J = 8 000 · 0,02 · 5 = <b>R$ 800,00</b> de juros<br>M = c + J = 8 000 + 800 = <b>R$ 8.800,00</b> de montante</div>",
+   "<div class='olhar'><b>A regra de ouro da fórmula:</b> a <b>taxa</b> e o <b>tempo</b> precisam estar na <b>mesma unidade</b>. Taxa ao mês → tempo em meses. Taxa ao ano → tempo em anos. Se a taxa é 36% ao ano e o tempo é em meses, primeiro ache quanto é por mês (36% ÷ 12 = 3% ao mês).</div>"
+  ],
+  "perguntas": [
+   {
+    "tag": "apl",
+    "q": "Ingrid pegou R$ 1.200,00 emprestados a uma taxa de juros simples de 2% ao mês e vai quitar a dívida depois de 3 meses. Use a fórmula e calcule o juro e o montante.",
+    "modelo": "c = 1 200, i = 0,02, t = 3. Então J = 1 200 · 0,02 · 3 = 72, ou seja, R$ 72,00 de juros. O montante é M = 1 200 + 72 = R$ 1.272,00.",
+    "chk": [
+     "Substituiu os valores na fórmula J = c · i · t?",
+     "Achou R$ 72,00 de juro e R$ 1.272,00 de montante?"
+    ]
+   },
+   {
+    "tag": "apl",
+    "q": "Paulo aplicou R$ 12.600,00 num fundo a uma taxa de juros simples de 5% ao ano, durante 5 anos. Qual é a quantia obtida com os juros? Mostre a substituição na fórmula.",
+    "modelo": "c = 12 600, i = 0,05, t = 5. J = 12 600 · 0,05 · 5 = 3 150. Ele obteve R$ 3.150,00 de juros. Aqui a taxa é ao ano e o tempo está em anos, então pode usar direto.",
+    "chk": [
+     "Mostrou a conta 12 600 · 0,05 · 5?",
+     "Chegou a R$ 3.150,00?"
+    ]
+   },
+   {
+    "tag": "conc",
+    "q": "Explique o que cada letra da fórmula J = c · i · t significa e qual é o cuidado que se deve ter com a taxa e o tempo.",
+    "modelo": "J é o juro, c é o capital, i é a taxa em porcentagem e t é o tempo. O cuidado é que a taxa e o tempo estejam na mesma unidade: se a taxa é ao mês, o tempo tem de estar em meses; se é ao ano, em anos.",
+    "chk": [
+     "Explicou o que são J, c, i e t?",
+     "Disse que a taxa e o tempo precisam estar na mesma unidade?"
+    ]
+   }
+  ]
+ },
+ {
+  "porto": "Máquina 12 · Princípio de equações · pp. 120-122",
+  "emoji": "🔐",
+  "u": "enf",
+  "titulo": "O Cofre do Enigma",
+  "parte": "Ala 4 · Zona do Enigma — descobrir o número escondido (Cap. 21)",
+  "texto": [
+   "Tudo começa com a ideia de <b>igualdade</b>. Quando escrevemos uma operação e o seu resultado ligados pelo sinal de igual, temos uma <span class='destaque'>sentença matemática</span>. Por exemplo, <b>12 + 8 = 20</b>: o que está antes da igualdade vale exatamente o mesmo que o que está depois.",
+   "Mas atenção: se <b>todos</b> os valores são conhecidos, isso ainda <b>não é uma equação</b> — é só uma sentença matemática. Falta o ingrediente principal: o <b>valor desconhecido</b>.",
+   "Imagine o enigma <b>☐ + 3 = 5</b>. O número que faz a sentença ficar verdadeira é o 2. Uma expressão assim, com um termo desconhecido, é uma <span class='destaque'>equação</span>: uma <b>igualdade matemática com pelo menos um valor desconhecido</b>. Esse número misterioso pode aparecer como um quadradinho ou, como se usa na Matemática, como uma <b>letra</b>.",
+   "A chave que abre o cofre é a <span class='destaque'>operação inversa</span>: a adição desfaz a subtração, a multiplicação desfaz a divisão — e vice-versa. Veja os exemplos do livro:",
+   "<div class='conta'>K − 5 = 2 &nbsp;→&nbsp; 5 + 2 = 7 &nbsp;→&nbsp; <b>K = 7</b><br>3 · T = 12 &nbsp;→&nbsp; 12 ÷ 3 = 4 &nbsp;→&nbsp; <b>T = 4</b><br>um número dividido por 8 é 7 &nbsp;→&nbsp; 8 · 7 = 56 &nbsp;→&nbsp; <b>o número é 56</b></div>",
+   "Uma equação pode até ter <b>mais de um</b> valor desconhecido (como 2m + 3n = 20, que aceita vários pares de respostas), mas neste capítulo estudamos as que têm um só.",
+   "<div class='olhar'><b>Pegadinha certeira:</b> a prova mostra <b>12 + 8 = 20</b> e pergunta se é uma equação. <b>Não é!</b> Sem valor desconhecido, é apenas uma sentença matemática.</div>"
+  ],
+  "perguntas": [
+   {
+    "tag": "conc",
+    "q": "Explique a diferença entre uma sentença matemática e uma equação.",
+    "modelo": "Sentença matemática é qualquer igualdade escrita com símbolos, como 12 + 8 = 20, em que todos os valores são conhecidos. Equação é uma igualdade que tem pelo menos um valor desconhecido, representado por um quadradinho ou por uma letra.",
+    "chk": [
+     "Disse que a sentença matemática tem todos os valores conhecidos?",
+     "Disse que a equação tem pelo menos um valor desconhecido?"
+    ]
+   },
+   {
+    "tag": "apl",
+    "q": "Resolva a equação k + 12 = 36 usando a operação inversa e explique o que você fez.",
+    "modelo": "A operação inversa da adição é a subtração. Então faço 36 − 12 = 24, ou seja, k = 24. Conferindo: 24 + 12 = 36. Está certo.",
+    "chk": [
+     "Usou a subtração (operação inversa da adição)?",
+     "Chegou a k = 24?"
+    ]
+   },
+   {
+    "tag": "apl",
+    "q": "Escreva em linguagem matemática a frase “o dobro de um número é igual a 10” e diga qual é esse número.",
+    "modelo": "Chamando o número de x, a equação é 2x = 10 (ou 2 · x = 10). Pela operação inversa, 10 ÷ 2 = 5, então x = 5.",
+    "chk": [
+     "Escreveu a equação 2x = 10?",
+     "Encontrou o número 5?"
+    ]
+   }
+  ]
+ },
+ {
+  "porto": "Máquina 13 · Equações e problemas · pp. 123-125",
+  "emoji": "🏆",
+  "u": "enf",
+  "titulo": "Enigma Resolvido",
+  "texto": [
+   "A última máquina junta tudo: transformar um <b>problema escrito em português</b> numa equação. O caminho é sempre o mesmo — dar uma <b>letra</b> ao valor desconhecido, montar a <b>igualdade</b> e usar a <b>operação inversa</b>.",
+   "<b>Exemplo 1 do livro.</b> Marcos comprou 3 sanduíches, pagou com uma nota de R$ 50,00 e recebeu R$ 27,50 de troco. Quanto custou cada sanduíche? Chamando o preço de <b>S</b>, o valor gasto mais o troco tem de dar 50:",
+   "<div class='conta'>3S + 27,50 = 50,00<br>50,00 − 27,50 = 22,50 &nbsp;→&nbsp; 3S = 22,50<br>22,50 ÷ 3 = <b>S = R$ 7,50</b></div>",
+   "E conferir faz parte do serviço: 3 · 7,50 + 27,50 = 22,50 + 27,50 = 50,00. ✔",
+   "<b>Exemplo 2.</b> Para transportar 80 pessoas foram usados 2 ônibus e sobraram 4 lugares vagos. Quantos assentos tem cada ônibus? Chamando de <b>x</b>:",
+   "<div class='conta'>2x − 4 = 80 &nbsp;→&nbsp; 80 + 4 = 84 &nbsp;→&nbsp; 2x = 84 &nbsp;→&nbsp; <b>x = 42 lugares</b></div>",
+   "Vale aprender também o jeito de <b>escrever</b> as situações em linguagem algébrica: <b>3 · S</b> é o mesmo que <b>3S</b>; três números <b>consecutivos</b> com o do meio igual a x são <b>x − 1, x, x + 1</b>; um número <b>par</b> é <b>2n</b> e o <b>ímpar</b>, que vem logo depois dele, é <b>2n + 1</b>; e um quadrado de lado x tem <b>área x²</b> e <b>perímetro 4x</b>.",
+   "A equação também vira <b>fórmula</b>. Como uma polegada equivale a 2,54 cm, a conversão fica <b>C = 2,54 · P</b>, em que C é a medida em centímetros e P, em polegadas. Uma tela de 32 polegadas: 32 · 2,54 = <b>81,28 cm</b>.",
+   "<div class='olhar'><b>Dica de ouro:</b> depois de achar o valor, <b>substitua-o na equação</b> e veja se a igualdade fecha. É o jeito mais rápido de descobrir um erro antes de entregar a prova.</div>"
+  ],
+  "perguntas": [
+   {
+    "tag": "apl",
+    "q": "Foram feitas 300 trufas para uma festa. Cada convidado comeu exatamente 6 trufas e ainda sobraram 30. Escreva a equação que representa a situação (chamando os convidados de x) e explique o que cada pedaço dela significa.",
+    "modelo": "A equação é 6x + 30 = 300. O 6x é o total de trufas comidas (6 por convidado, vezes x convidados), o 30 é o que sobrou e o 300 é o total que foi feito. As trufas comidas mais as que sobraram dão o total.",
+    "chk": [
+     "Escreveu 6x + 30 = 300?",
+     "Explicou que 6x são as trufas comidas pelos convidados?",
+     "Explicou que o 30 é a sobra e o 300 é o total?"
+    ]
+   },
+   {
+    "tag": "apl",
+    "q": "Resolva a equação 2x − 4 = 80 e depois confira o resultado substituindo o valor encontrado. Escreva as duas etapas.",
+    "modelo": "Resolvendo: pela operação inversa, 80 + 4 = 84, então 2x = 84 e x = 84 ÷ 2 = 42. Conferindo: 2 · 42 − 4 = 84 − 4 = 80. A igualdade fechou, então x = 42 está certo.",
+    "chk": [
+     "Chegou a x = 42?",
+     "Fez a conferência substituindo o 42 na equação?"
+    ]
+   },
+   {
+    "tag": "apl",
+    "q": "Uma televisão tem 40 polegadas. Use a fórmula C = 2,54 · P e descubra quantos centímetros tem a diagonal dela. Mostre a conta.",
+    "modelo": "Substituindo P por 40: C = 2,54 · 40 = 101,6. A diagonal da televisão tem 101,6 cm.",
+    "chk": [
+     "Substituiu o 40 no lugar do P?",
+     "Chegou a 101,6 cm?"
+    ]
+   }
+  ]
+ }
+];
+
+/* ====== ESTADO E PERSISTÊNCIA ====== */
+var CHAVE=KIT+'_leitura_v1';
+var mem={};
+var estado=carregar();
+
+function carregar(){
+  try{ var s=localStorage.getItem(CHAVE); if(s) return JSON.parse(s); }catch(e){ if(mem[CHAVE]) return JSON.parse(mem[CHAVE]); }
+  return {blocos:{}};
+}
+function calcProgresso(){
+  var conf=0, chkPend=0;
+  BLOCOS.forEach(function(bloco,i){
+    var b=estado.blocos[i]; if(!b||!b.conferido) return; conf++;
+    bloco.perguntas.forEach(function(p,j){ var ep=(b.perguntas&&b.perguntas[j])||{chk:{}}; p.chk.forEach(function(pt,k){ if(!ep.chk||!ep.chk[k]) chkPend++; }); });
+  });
+  estado.progresso={conferidos:conf,total:BLOCOS.length,chkPendentes:chkPend};
+  if(conf===BLOCOS.length && chkPend===0){ if(!estado.concluido){ estado.concluido=true; estado.concluidoEm=new Date().toISOString(); } }
+  return estado.progresso;
+}
+function salvar(){
+  calcProgresso();
+  var s=JSON.stringify(estado);
+  try{ localStorage.setItem(CHAVE,s); }catch(e){ mem[CHAVE]=s; }
+  var d=new Date();
+  document.getElementById('salvo').textContent='💾 Salvo às '+d.toLocaleTimeString('pt-BR')+' de '+d.toLocaleDateString('pt-BR');
+  atualizarTrilhaFim();
+}
+function atualizarTrilhaFim(){
+  var p=estado.progresso||calcProgresso();
+  var box=document.getElementById('trilha-fim'), txt=document.getElementById('trilha-fim-txt'), btn=document.getElementById('btn-prox');
+  var h3=box.querySelector('h3');
+  if(estado.concluido||trilhaLiberada()){
+    h3.textContent='✅ Leitura concluída — Resumo destravado!';
+    txt.textContent=estado.concluido?'Você conferiu as '+BLOCOS.length+' máquinas e respondeu a autoavaliação. Agora organize tudo no Resumo.':'Trilha liberada pelos pais.';
+    btn.classList.remove('off');
+  } else {
+    h3.textContent='🔒 Próxima etapa: Resumo';
+    var faltam=p.total-p.conferidos;
+    txt.textContent=faltam>0 ? 'Destrava quando você conferir as '+p.total+' máquinas (faltam '+faltam+').' : 'Falta responder a autoavaliação Sim/Não de '+p.chkPendentes+' ponto(s) para destravar.';
+    btn.classList.add('off');
+  }
+  marcarNav();
+}
+function estBloco(i){ if(!estado.blocos[i]) estado.blocos[i]={aberto:i===0,conferido:false,perguntas:{}}; return estado.blocos[i]; }
+function estPerg(i,j){ var b=estBloco(i); if(!b.perguntas[j]) b.perguntas[j]={resp:'',warned:false,red:false,tentou:'',chk:{}}; return b.perguntas[j]; }
+
+/* ====== ANTICÓPIA (motor validado — mesmo dos kits anteriores do 6º ano) ====== */
+function normPal(s){
+  return (s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/<[^>]*>/g,' ').replace(/[^a-z0-9\s]/g,' ').replace(/\s+/g,' ').trim().split(' ').filter(Boolean);
+}
+function maiorRun(aw,bw){
+  var bStr=' '+bw.join(' ')+' ', best=0;
+  for(var i=0;i<aw.length;i++){
+    for(var len=aw.length-i; len>0; len--){
+      var sub=aw.slice(i,i+len).join(' ');
+      if(bStr.indexOf(' '+sub+' ')>=0){ if(len>best)best=len; break; }
+    }
+  }
+  return best;
+}
+function cobertoPorRuns(aw,bw,minRun){
+  var bStr=' '+bw.join(' ')+' ', cov=new Array(aw.length).fill(false);
+  for(var i=0;i<aw.length;i++){
+    for(var len=aw.length-i; len>=minRun; len--){
+      var sub=aw.slice(i,i+len).join(' ');
+      if(bStr.indexOf(' '+sub+' ')>=0){ for(var k=i;k<i+len;k++)cov[k]=true; break; }
+    }
+  }
+  return cov.filter(Boolean).length;
+}
+function ehCopia(resp, textoBloco, pergunta){
+  var a=normPal(resp), src=normPal(textoBloco), q=normPal(pergunta);
+  if(a.length<5) return false;
+  var qStr=' '+q.join(' ')+' ', keep=new Array(a.length).fill(true);
+  for(var i=0;i<a.length;i++){
+    for(var len=a.length-i; len>=4; len--){
+      var sub=a.slice(i,i+len).join(' ');
+      if(qStr.indexOf(' '+sub+' ')>=0){ for(var k=i;k<i+len;k++)keep[k]=false; break; }
+    }
+  }
+  var af=a.filter(function(w,idx){return keep[idx];});
+  if(af.length<5) return false;
+  var run=maiorRun(af,src);
+  var cov=cobertoPorRuns(af,src,5);
+  var ratio=cov/af.length;
+  return run>=8 || ratio>0.6;
+}
+
+/* ====== RENDER ====== */
+function textoPlano(bloco){ return bloco.texto.join(' '); }
+function irBloco(i){ var el=document.getElementById('bloco'+i); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); }
+
+function render(){
+  var cont=document.getElementById('blocos'); cont.innerHTML='';
+  BLOCOS.forEach(function(bloco,i){
+    var b=estBloco(i);
+    if(bloco.parte){ var pt=document.createElement('div'); pt.className='parte '+bloco.u; pt.textContent='🕹️ '+bloco.parte; cont.appendChild(pt); }
+    var div=document.createElement('div'); div.className='bloco '+bloco.u+(b.aberto?'':' travado'); div.id='bloco'+i;
+    var html='<div class="bloco-cab"><div class="num">'+(i+1)+'</div><div><div class="porto">'+bloco.porto+'</div><h3>'+bloco.emoji+' '+bloco.titulo+'</h3></div></div>';
+    if(!b.aberto){
+      html+='<div class="cadeado">🔒 Esta máquina liga quando você conferir a máquina anterior.</div>';
+      div.innerHTML=html; cont.appendChild(div); return;
+    }
+    html+='<div class="bloco-corpo"><div class="texto">';
+    bloco.texto.forEach(function(p){ html+= (p.indexOf('<div')===0 || p.indexOf('<ul')===0 ? p : '<p>'+p+'</p>'); });
+    html+='</div>';
+    bloco.perguntas.forEach(function(p,j){
+      var ep=estPerg(i,j);
+      var tagTxt=p.tag==='conc'?'Conceito':'Aplicação';
+      html+='<div class="perg'+(ep.red?' red':'')+'" id="perg'+i+'_'+j+'">';
+      html+='<span class="tag '+p.tag+'">'+tagTxt+'</span>';
+      html+='<label>'+(j+1)+'. '+p.q+'</label>';
+      html+='<textarea id="ta'+i+'_'+j+'" oninput="digitou('+i+','+j+')">'+(ep.resp||'').replace(/</g,'&lt;')+'</textarea>';
+      html+='<div class="aviso" id="av'+i+'_'+j+'"></div>';
+      html+='<div class="modelo" id="mod'+i+'_'+j+'"><span class="lab">Resposta-modelo</span><p>'+p.modelo+'</p>';
+      html+='<div class="chk" id="chk'+i+'_'+j+'"></div></div>';
+      html+='</div>';
+    });
+    html+='<button class="conferir" id="conf'+i+'" onclick="conferir('+i+')">✔️ Conferir esta máquina</button>';
+    html+='<div class="status-bloco" id="st'+i+'"></div>';
+    if(i<BLOCOS.length-1){ html+='<div class="prox" id="px'+i+'"></div>'; }
+    html+='</div>';
+    div.innerHTML=html;
+    cont.appendChild(div);
+  });
+  BLOCOS.forEach(function(bloco,i){
+    var b=estBloco(i);
+    if(b.aberto && b.conferido){ mostrarConferido(i); }
+    atualizarBotao(i);
+  });
+  atualizarRelatorio();
+  atualizarTrilhaFim();
+}
+
+function digitou(i,j){
+  var ep=estPerg(i,j);
+  ep.resp=document.getElementById('ta'+i+'_'+j).value;
+  if(ep.red){
+    var bloco=BLOCOS[i];
+    if(!ehCopia(ep.resp, textoPlano(bloco), bloco.perguntas[j].q)){
+      ep.red=false;
+      var pd=document.getElementById('perg'+i+'_'+j); if(pd) pd.classList.remove('red');
+      var av=document.getElementById('av'+i+'_'+j); if(av){av.className='aviso'; av.textContent='';}
+    }
+  }
+  atualizarBotao(i);
+  salvar();
+  atualizarRelatorio();
+}
+
+function atualizarBotao(i){
+  var b=estBloco(i); if(!b.aberto) return;
+  var btn=document.getElementById('conf'+i); if(!btn) return;
+  if(b.conferido){ btn.textContent='✔️ Máquina conferida'; btn.disabled=true; return; }
+  var todas=true;
+  BLOCOS[i].perguntas.forEach(function(p,j){
+    var v=(document.getElementById('ta'+i+'_'+j)||{}).value||estPerg(i,j).resp||'';
+    if(v.trim().length<3) todas=false;
+  });
+  btn.disabled=!todas;
+}
+
+function conferir(i){
+  var bloco=BLOCOS[i], b=estBloco(i);
+  var algumBloqueado=false;
+  bloco.perguntas.forEach(function(p,j){
+    var ep=estPerg(i,j);
+    ep.resp=document.getElementById('ta'+i+'_'+j).value;
+    var av=document.getElementById('av'+i+'_'+j);
+    var copia=ehCopia(ep.resp, textoPlano(bloco), p.q);
+    if(copia){
+      if(!ep.warned || ep.resp===ep.tentou){
+        if(!ep.warned){ ep.warned=true; ep.tentou=ep.resp; }
+        av.className='aviso amarelo';
+        av.innerHTML='✋ Boa parte da sua resposta está igual ao texto. Tente <b>reescrever com as suas palavras</b> — explique como se fosse para um amigo, sem olhar o texto. Pode ficar mais curto e simples: o que vale é ser <b>SEU</b>.';
+        algumBloqueado=true;
+      } else {
+        ep.red=true;
+        av.className='aviso vermelho';
+        av.innerHTML='🔴 Esta resposta continua muito parecida com o texto. Ela foi aceita, mas ficou marcada para revisar. Se reescrever com as suas palavras, a marca some.';
+        document.getElementById('perg'+i+'_'+j).classList.add('red');
+      }
+    } else {
+      ep.red=false;
+      if(av){ av.className='aviso'; av.textContent=''; }
+      var pd=document.getElementById('perg'+i+'_'+j); if(pd) pd.classList.remove('red');
+    }
+  });
+  salvar();
+  if(algumBloqueado){
+    document.getElementById('st'+i).innerHTML='<span style="color:var(--ambar)">✍️ Reescreva as respostas marcadas em amarelo (mude o que escreveu) e clique em Conferir de novo.</span>';
+    return;
+  }
+  b.conferido=true;
+  if(i<BLOCOS.length-1){ estBloco(i+1).aberto=true; }
+  salvar();
+  render();
+  var alvo=document.getElementById('bloco'+i);
+  if(alvo) alvo.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function mostrarConferido(i){
+  var bloco=BLOCOS[i];
+  bloco.perguntas.forEach(function(p,j){
+    var ep=estPerg(i,j);
+    var mod=document.getElementById('mod'+i+'_'+j); if(mod) mod.classList.add('show');
+    if(ep.red){ var pd=document.getElementById('perg'+i+'_'+j); if(pd) pd.classList.add('red');
+      var av=document.getElementById('av'+i+'_'+j); if(av){av.className='aviso vermelho'; av.innerHTML='🔴 Resposta marcada para revisar (muito parecida com o texto). Reescreva com as suas palavras para tirar a marca.';}
+    }
+    var chk=document.getElementById('chk'+i+'_'+j); if(chk){
+      var h='<b style="font-size:.8rem;color:#8ff5bb">Confira você: a sua resposta…</b>';
+      p.chk.forEach(function(pt,k){
+        var val=ep.chk[k]||'';
+        h+='<div class="item"><span>'+pt+'</span><span class="simnao">'
+         +'<button class="sim'+(val==='sim'?' ativo':'')+'" onclick="marcarChk('+i+','+j+','+k+',\'sim\')">Sim</button>'
+         +'<button class="nao'+(val==='nao'?' ativo':'')+'" onclick="marcarChk('+i+','+j+','+k+',\'nao\')">Não</button>'
+         +'</span></div>';
+      });
+      chk.innerHTML=h;
+    }
+  });
+  atualizarStatusBloco(i);
+  var btn=document.getElementById('conf'+i); if(btn){ btn.textContent='✔️ Máquina conferida'; btn.disabled=true; }
+  if(i<BLOCOS.length-1){
+    var px=document.getElementById('px'+i);
+    if(px) px.innerHTML='<a href="#bloco'+(i+1)+'" onclick="irBloco('+(i+1)+');return false;">➡️ Ir para a próxima máquina</a>';
+  }
+}
+
+function marcarChk(i,j,k,val){
+  var ep=estPerg(i,j); ep.chk[k]=val;
+  salvar(); mostrarConferido(i); atualizarStatusBloco(i); atualizarRelatorio();
+}
+
+function statusPergunta(i,j){
+  var ep=estPerg(i,j), p=BLOCOS[i].perguntas[j];
+  if(ep.red) return 'revisar';
+  var temNao=false, todasResp=true;
+  p.chk.forEach(function(pt,k){ if(ep.chk[k]==='nao') temNao=true; if(!ep.chk[k]) todasResp=false; });
+  if(temNao) return 'revisar';
+  if(!todasResp) return 'pendente';
+  return 'ok';
+}
+function atualizarStatusBloco(i){
+  var st=document.getElementById('st'+i); if(!st) return;
+  var revisar=false, pendente=false;
+  BLOCOS[i].perguntas.forEach(function(p,j){ var s=statusPergunta(i,j); if(s==='revisar')revisar=true; if(s==='pendente')pendente=true; });
+  if(revisar) st.innerHTML='<span style="color:#ffb3b3">🔁 Esta máquina tem pontos para revisar.</span>';
+  else if(pendente) st.innerHTML='<span style="color:var(--ambar)">📝 Responda a autoavaliação (Sim/Não) de cada pergunta.</span>';
+  else st.innerHTML='<span style="color:#8ff5bb">✅ Máquina concluída com sucesso!</span>';
+  atualizarRelatorio();
+}
+
+function atualizarRelatorio(){
+  var lista=[], totalConf=0, totalRed=0, totalNao=0;
+  BLOCOS.forEach(function(bloco,i){
+    var b=estBloco(i); if(!b.conferido) return; totalConf++;
+    bloco.perguntas.forEach(function(p,j){
+      var ep=estPerg(i,j);
+      if(ep.red){ totalRed++; lista.push('Máquina '+(i+1)+' ('+bloco.titulo+'): pergunta '+(j+1)+' — resposta muito parecida com o texto.'); }
+      p.chk.forEach(function(pt,k){ if(ep.chk[k]==='nao'){ totalNao++; lista.push('Máquina '+(i+1)+' ('+bloco.titulo+'): revisar — "'+pt+'"'); } });
+    });
+  });
+  var rev=document.getElementById('revisar'), rl=document.getElementById('revisar-lista');
+  if(lista.length){ rev.style.display='block'; rl.innerHTML=lista.map(function(x){return '<li>'+x+'</li>';}).join(''); }
+  else { rev.style.display='none'; rl.innerHTML=''; }
+  var rc=document.getElementById('rel-conteudo');
+  rc.innerHTML='<b>Máquinas conferidas:</b> '+totalConf+' de '+BLOCOS.length+'.<br>'
+    +'<b>Respostas marcadas (muito parecidas com o texto):</b> '+totalRed+'.<br>'
+    +'<b>Pontos marcados como "Não" na autoavaliação:</b> '+totalNao+'.<br>'
+    +(lista.length? '<span style="color:#ffb3b3">Há '+lista.length+' ponto(s) para revisar (lista acima).</span>' : '<span style="color:#8ff5bb">Sem pontos pendentes para revisar. 👏</span>');
+}
+
+/* ====== EXPORTAR / IMPORTAR / ZERAR ====== */
+function exportar(){
+  var dados=JSON.stringify(estado,null,2);
+  var blob=new Blob([dados],{type:'application/json'});
+  var a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download='leitura-estendida_fliperama-do-enigma.json'; a.click();
+}
+function importar(ev){
+  var f=ev.target.files[0]; if(!f) return;
+  var r=new FileReader();
+  r.onload=function(){ try{ estado=JSON.parse(r.result); salvar(); render(); mostrarModal('✅ Progresso importado!',false); }catch(e){ mostrarModal('❌ Arquivo inválido.',false); } };
+  r.readAsText(f);
+}
+var acaoZerar=null;
+function pedirZerar(){ acaoZerar=true; mostrarModal('Tem certeza que quer apagar TODO o progresso desta leitura? (O Resumo continua destravado se já tiver sido destravado.)',true); }
+function mostrarModal(txt,confirmar){
+  document.getElementById('modal-txt').innerHTML=txt;
+  document.getElementById('modal').classList.add('show');
+  document.getElementById('modal-cancel').style.display=confirmar?'inline-block':'none';
+  document.getElementById('modal-ok').textContent=confirmar?'Sim, apagar':'Ok';
+  document.getElementById('modal-ok').onclick=function(){ if(confirmar && acaoZerar){ var c=estado.concluido, ce=estado.concluidoEm; estado={blocos:{}}; if(c){estado.concluido=true; estado.concluidoEm=ce;} salvar(); render(); } acaoZerar=null; fecharModal(); };
+}
+function fecharModal(){ document.getElementById('modal').classList.remove('show'); }
+
+render();
+</script>
+</body>
+</html>
